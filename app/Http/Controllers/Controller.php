@@ -53,18 +53,6 @@ abstract class Controller
     }
 
     /**
-     * Competency levels data.
-     */
-    protected function competencies(): array
-    {
-        return [
-            ['role' => 'Staff', 'text' => 'Uji kompetensi dasar, potensi kerja, dan kesesuaian peran.'],
-            ['role' => 'Supervisor', 'text' => 'Review kemampuan koordinasi, problem solving, dan kepemimpinan operasional.'],
-            ['role' => 'Manager', 'text' => 'Pemetaan kompetensi strategis, pengambilan keputusan, dan leadership.'],
-        ];
-    }
-
-    /**
      * Testimonials data.
      */
     protected function testimonials(): array
@@ -73,19 +61,6 @@ abstract class Controller
             ['quote' => 'Pelayanannya profesional, komunikatif, dan membantu kami memahami kebutuhan assessment dengan lebih jelas.', 'name' => 'Klien Organisasi', 'role' => 'HR Department'],
             ['quote' => 'Hasil tes dan penjelasannya membantu kami mengambil keputusan pendidikan anak dengan lebih tenang.', 'name' => 'Orang Tua Siswa', 'role' => 'Layanan Pendidikan'],
             ['quote' => 'Materi psikoedukasinya mudah dipahami dan relevan dengan kebutuhan peserta.', 'name' => 'Peserta Webinar', 'role' => 'Program Pelatihan'],
-        ];
-    }
-
-    /**
-     * Target audience data.
-     */
-    protected function audiences(): array
-    {
-        return [
-            ['number' => '01', 'title' => 'Individu & Keluarga', 'text' => 'Ruang aman untuk memahami diri, memperbaiki relasi, serta mengelola masalah personal dan keluarga.'],
-            ['number' => '02', 'title' => 'Siswa & Orang Tua', 'text' => 'Pemetaan kemampuan, minat, bakat, dan kesiapan sekolah untuk mendukung keputusan pendidikan.'],
-            ['number' => '03', 'title' => 'Sekolah & Lembaga', 'text' => 'Konseling pendidikan, assessment, webinar, dan pelatihan yang relevan dengan kebutuhan lembaga.'],
-            ['number' => '04', 'title' => 'Perusahaan & Organisasi', 'text' => 'Seleksi, review kompetensi, pemetaan potensi, dan coaching untuk keputusan SDM yang lebih akurat.'],
         ];
     }
 }

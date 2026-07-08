@@ -55,25 +55,6 @@
         </div>
     </section>
 
-    {{-- ═══ SASARAN KLIEN ═══ --}}
-    <section class="section-pad bg-[#fdfbf5]">
-        <div class="section-container">
-            <div class="mx-auto max-w-3xl text-center reveal">
-                <p class="eyebrow justify-center">Dukungan Menyeluruh</p>
-                <h2 class="heading-2">Untuk Setiap Kebutuhan Pengembangan Manusia</h2>
-                <p class="mt-4 text-base text-slate-600 lg:text-lg">Layanan LoAction dapat disesuaikan untuk individu, keluarga, institusi pendidikan, perusahaan, dan pengelola SDM.</p>
-            </div>
-            <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                @foreach ($audiences as $index => $audience)
-                    <article class="group rounded-[1.6rem] bg-white p-6 shadow-sm ring-1 ring-loaction-100/80 transition hover:-translate-y-2 hover:shadow-card reveal" style="transition-delay: {{ $index * 80 }}ms;">
-                        <span class="inline-block rounded-lg bg-gradient-to-br from-loaction-500 to-loaction-600 px-2.5 py-1 text-xs font-black text-white shadow-sm">{{ $audience['number'] }}</span>
-                        <h3 class="mt-4 text-lg font-black text-ink">{{ $audience['title'] }}</h3>
-                        <p class="mt-2 text-sm leading-6 text-slate-600">{{ $audience['text'] }}</p>
-                    </article>
-                @endforeach
-            </div>
-        </div>
-    </section>
 
     {{-- ═══ CTA ═══ --}}
     <section class="section-pad bg-loaction-900 text-white">

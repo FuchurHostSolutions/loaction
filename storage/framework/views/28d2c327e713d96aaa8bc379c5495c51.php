@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title', 'LoAction | Biro Psikologi Terapan — Handle with Care'); ?>
 
 <?php $__env->startSection('content'); ?>
@@ -170,4 +172,4 @@
 
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\Kerja\loaction_laravel\resources\views/pages/home.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\fuchur\loaction\resources\views/pages/home.blade.php ENDPATH**/ ?>

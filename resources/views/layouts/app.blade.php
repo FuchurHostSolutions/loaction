@@ -9,6 +9,9 @@
 
     <title>@yield('title', 'LoAction | Biro Psikologi Terapan')</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
     <!-- Open Graph -->
     <meta property="og:title" content="@yield('title', 'LoAction | Biro Psikologi Terapan')">
     <meta property="og:description" content="Handle with care — Layanan psikologis untuk personal care, pendidikan, industri-organisasi, dan uji kompetensi SDM.">
@@ -50,8 +53,7 @@
         <nav class="border-b border-loaction-100/60 bg-[#fdfbf5]/85 backdrop-blur-xl" aria-label="Navigasi utama">
             <div class="section-container flex min-h-[4.5rem] items-center justify-between gap-6">
                 <a href="{{ route('home') }}" class="flex items-center gap-3" aria-label="LoAction beranda">
-                    <span class="grid size-11 place-items-center rounded-[16px_16px_16px_4px] bg-gradient-to-br from-loaction-600 to-loaction-400 text-sm font-black text-white shadow-lg shadow-loaction-600/20">LA</span>
-                    <span class="text-xl font-black tracking-tight text-ink">LoAction</span>
+                    <img src="{{ asset('images/logo.png') }}" alt="LoAction Logo" class="size-12 rounded-full object-cover shadow-sm">
                 </a>
 
                 <button id="navToggle" type="button" class="grid size-10 place-items-center rounded-xl bg-loaction-100 text-loaction-900 transition hover:bg-loaction-200 lg:hidden" aria-label="Buka menu" aria-expanded="false">
@@ -64,7 +66,6 @@
                     <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Beranda</a>
                     <a class="nav-link {{ request()->routeIs('layanan') ? 'active' : '' }}" href="{{ route('layanan') }}">Layanan</a>
                     <a class="nav-link {{ request()->routeIs('profil') ? 'active' : '' }}" href="{{ route('profil') }}">Profil</a>
-                    <a class="nav-link {{ request()->routeIs('uji-kompetensi') ? 'active' : '' }}" href="{{ route('uji-kompetensi') }}">Uji Kompetensi</a>
                     <a class="nav-link {{ request()->routeIs('kontak') ? 'active' : '' }}" href="{{ route('kontak') }}">Kontak</a>
                 </div>
             </div>
@@ -84,7 +85,6 @@
             <a class="mobile-link rounded-xl px-4 py-3.5 text-sm font-extrabold transition {{ request()->routeIs('home') ? 'bg-loaction-50 text-loaction-700' : 'text-loaction-900 hover:bg-loaction-50' }}" href="{{ route('home') }}">Beranda</a>
             <a class="mobile-link rounded-xl px-4 py-3.5 text-sm font-extrabold transition {{ request()->routeIs('layanan') ? 'bg-loaction-50 text-loaction-700' : 'text-loaction-900 hover:bg-loaction-50' }}" href="{{ route('layanan') }}">Layanan</a>
             <a class="mobile-link rounded-xl px-4 py-3.5 text-sm font-extrabold transition {{ request()->routeIs('profil') ? 'bg-loaction-50 text-loaction-700' : 'text-loaction-900 hover:bg-loaction-50' }}" href="{{ route('profil') }}">Profil</a>
-            <a class="mobile-link rounded-xl px-4 py-3.5 text-sm font-extrabold transition {{ request()->routeIs('uji-kompetensi') ? 'bg-loaction-50 text-loaction-700' : 'text-loaction-900 hover:bg-loaction-50' }}" href="{{ route('uji-kompetensi') }}">Uji Kompetensi</a>
             <a class="mobile-link rounded-xl px-4 py-3.5 text-sm font-extrabold transition {{ request()->routeIs('kontak') ? 'bg-loaction-50 text-loaction-700' : 'text-loaction-900 hover:bg-loaction-50' }}" href="{{ route('kontak') }}">Kontak</a>
         </div>
         <div class="mt-auto border-t border-loaction-100 p-5">
@@ -104,8 +104,7 @@
                 <!-- Brand -->
                 <div>
                     <div class="mb-5 flex items-center gap-3">
-                        <span class="grid size-11 place-items-center rounded-[16px_16px_16px_4px] bg-white text-sm font-black text-loaction-900">LA</span>
-                        <span class="text-xl font-black">LoAction</span>
+                        <img src="{{ asset('images/logo.png') }}" alt="LoAction Logo" class="size-12 rounded-full object-cover shadow-md">
                     </div>
                     <p class="max-w-md text-sm leading-7 text-white/70">Biro psikologi terapan untuk personal care, pendidikan, industri-organisasi, dan uji kompetensi SDM. Handle with care sejak 2017.</p>
                     <div class="mt-5 flex gap-3">
@@ -125,7 +124,6 @@
                         <a href="{{ route('home') }}" class="transition hover:text-white hover:translate-x-1">Beranda</a>
                         <a href="{{ route('layanan') }}" class="transition hover:text-white hover:translate-x-1">Layanan</a>
                         <a href="{{ route('profil') }}" class="transition hover:text-white hover:translate-x-1">Profil Biro</a>
-                        <a href="{{ route('uji-kompetensi') }}" class="transition hover:text-white hover:translate-x-1">Uji Kompetensi</a>
                         <a href="{{ route('kontak') }}" class="transition hover:text-white hover:translate-x-1">Kontak</a>
                     </div>
                 </div>

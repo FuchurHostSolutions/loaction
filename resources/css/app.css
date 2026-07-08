@@ -2,27 +2,27 @@
 
 /* ─── Custom Theme (Tailwind v4) ─── */
 @theme {
-  --color-loaction-50: #f2fbf6;
-  --color-loaction-100: #e8f6ef;
-  --color-loaction-200: #cbeadb;
-  --color-loaction-300: #9dd8c0;
-  --color-loaction-400: #6bc29f;
-  --color-loaction-500: #4fae8f;
-  --color-loaction-600: #2f7a68;
-  --color-loaction-700: #286557;
-  --color-loaction-800: #1d5148;
-  --color-loaction-900: #153b35;
+  --color-loaction-50: #fff4ed;
+  --color-loaction-100: #ffe6d5;
+  --color-loaction-200: #feccaa;
+  --color-loaction-300: #fdb07a;
+  --color-loaction-400: #fc8d44;
+  --color-loaction-500: #f26522; /* Logo Orange */
+  --color-loaction-600: #e24912;
+  --color-loaction-700: #bd3410;
+  --color-loaction-800: #962a15;
+  --color-loaction-900: #782513;
 
-  --color-cream: #fff7e8;
-  --color-peach: #ffcf9f;
-  --color-honey: #ffe4a8;
-  --color-ink: #16302c;
+  --color-cream: #fcf9f5;
+  --color-peach: #ffe0cc;
+  --color-honey: #ffcc99;
+  --color-ink: #231f20; /* Logo Dark Gray/Black */
 
   --font-sans: 'Nunito', ui-sans-serif, system-ui, sans-serif;
 
-  --shadow-soft: 0 24px 70px rgba(22, 48, 44, 0.14);
-  --shadow-card: 0 8px 32px rgba(22, 48, 44, 0.09);
-  --shadow-glow: 0 0 40px rgba(79, 174, 143, 0.25);
+  --shadow-soft: 0 24px 70px rgba(35, 31, 32, 0.08);
+  --shadow-card: 0 8px 32px rgba(35, 31, 32, 0.06);
+  --shadow-glow: 0 0 40px rgba(242, 101, 34, 0.2);
 
   --radius-4xl: 2rem;
   --radius-5xl: 2.4rem;
