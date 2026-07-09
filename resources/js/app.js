@@ -26,25 +26,6 @@ mobileClose?.addEventListener('click', closeMobileMenu);
 mobileOverlay?.addEventListener('click', closeMobileMenu);
 mobileLinks.forEach((link) => link.addEventListener('click', closeMobileMenu));
 
-/* ─── Active Nav Link ─── */
-const sections = [...document.querySelectorAll('main section[id]')];
-
-function setActiveLink() {
-  const offset = window.scrollY + 180;
-  let current = sections[0]?.id;
-
-  sections.forEach((section) => {
-    if (section.offsetTop <= offset) current = section.id;
-  });
-
-  document.querySelectorAll('.nav-link').forEach((link) => {
-    link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
-  });
-}
-
-window.addEventListener('scroll', setActiveLink, { passive: true });
-setActiveLink();
-
 /* ─── Scroll Reveal ─── */
 const revealObserver = new IntersectionObserver(
   (entries) => {
@@ -87,7 +68,7 @@ if (track && viewport) {
 
   function updateCarousel() {
     const perView = getSlidesPerView();
-    const gap = 24; // 1.5rem in px
+    const gap = 24;
     const slideWidth = (viewport.offsetWidth - gap * (perView - 1)) / perView;
 
     slides.forEach((slide) => {
@@ -97,7 +78,6 @@ if (track && viewport) {
     const offset = currentIndex * (slideWidth + gap);
     track.style.transform = `translateX(-${offset}px)`;
 
-    // Update dots
     if (dotsContainer) {
       const maxIdx = getMaxIndex();
       dotsContainer.innerHTML = '';
@@ -114,7 +94,6 @@ if (track && viewport) {
       }
     }
 
-    // Disable buttons at boundaries
     if (prevBtn) prevBtn.style.opacity = currentIndex === 0 ? '0.4' : '1';
     if (nextBtn) nextBtn.style.opacity = currentIndex >= getMaxIndex() ? '0.4' : '1';
   }
@@ -162,11 +141,9 @@ if (track && viewport) {
     }
   }, { passive: true });
 
-  // Initial setup
   updateCarousel();
   resetAutoPlay();
 
-  // Recalculate on resize
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
@@ -177,14 +154,74 @@ if (track && viewport) {
   });
 }
 
-/* ─── Smooth header shadow on scroll ─── */
-const header = document.querySelector('header');
+/* ─── Header scroll effect ─── */
+const header = document.getElementById('siteHeader');
+const mainNav = document.getElementById('mainNav');
+
 if (header) {
+  let lastScroll = 0;
+
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 20) {
-      header.style.boxShadow = '0 4px 20px rgba(22, 48, 44, 0.08)';
+    const scrollY = window.scrollY;
+
+    if (scrollY > 20) {
+      header.classList.add('header-scrolled');
+      if (mainNav) {
+        mainNav.style.background = 'rgba(255, 255, 255, 0.97)';
+      }
     } else {
-      header.style.boxShadow = 'none';
+      header.classList.remove('header-scrolled');
+      if (mainNav) {
+        mainNav.style.background = '';
+      }
     }
+
+    lastScroll = scrollY;
   }, { passive: true });
 }
+
+/* ─── Counter Animation ─── */
+const counterObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.getAttribute('data-target'));
+        if (isNaN(target)) return;
+
+        const duration = 1500;
+        const start = performance.now();
+
+        function animate(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = Math.round(eased * target);
+          el.textContent = current;
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          }
+        }
+
+        requestAnimationFrame(animate);
+        counterObserver.unobserve(el);
+      }
+    });
+  },
+  { threshold: 0.5 }
+);
+
+document.querySelectorAll('.counter-value[data-target]').forEach((el) => {
+  counterObserver.observe(el);
+});
+
+/* ─── Smooth scroll for anchor links ─── */
+document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+  anchor.addEventListener('click', function (e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
