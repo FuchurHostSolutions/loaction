@@ -107,7 +107,9 @@ cd /var/www/loaction && php artisan migrate --force && php artisan optimize
 ### Fase 4: Integrasi Konten & SEO (SEDANG BERJALAN)
 - [x] Tampilkan data `$audiences` dan `$competencies` secara dinamis di `pages/home.blade.php`.
 - [x] Optimasi responsivitas mobile-first pada halaman Beranda (penyesuaian padding layar kecil, touch target tombol adaptif, card grid responsif, perbaikan nesting tag HTML).
-- [x] **Fix Login Production:** `APP_URL` dan `SESSION_DOMAIN` di server diperbarui ke domain `loaction.buildsys.site` agar Livewire/CSRF/session match dan login berfungsi.
+- [x] **Fix Login Production:** 
+  - Mengonfigurasi `trustProxies(at: '*')` di `bootstrap/app.php` dan `URL::forceScheme('https')` di `AppServiceProvider.php` agar Livewire mengenali skema HTTPS di balik reverse proxy Cloudflare. Sebelumnya, URL Livewire di-generate dengan `http://` sehingga browser memblokir request form login karena **Mixed Content** (HTTPS form to HTTP endpoint).
+  - Mengatur permission `.env` ke `644` dan `SESSION_DOMAIN=null` agar cookie sesi tersimpan otomatis sesuai host domain.
 - [x] **Fix Placeholder Login:** Hapus hint placeholder "admin@loaction.id atau iqbal" dari form login Filament.
 - [x] **Fix Icon Kompetensi:** Icon berhasil diganti dari heroicon class name ke emoji (👤👥💼✨) agar tampil di halaman Beranda.
 - [ ] Tambahkan Schema Markup JSON-LD `MedicalBusiness` di layout `app.blade.php`.
