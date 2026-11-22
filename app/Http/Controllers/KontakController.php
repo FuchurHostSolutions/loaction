@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Consultation;
 use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
@@ -57,6 +58,21 @@ class KontakController extends Controller
             'message'        => $validated['message'] ?? null,
             'status'         => 'pending',
         ]);
+
+        ActivityLog::record(
+            action: 'consultation.create',
+            description: "Pendaftaran konsultasi baru dari {$consultation->name} ({$consultation->phone}) untuk layanan '{$consultation->service_name}'.",
+            actionType: 'consultation',
+            subject: $consultation,
+            properties: [
+                'consultation_id' => $consultation->id,
+                'client_name'     => $consultation->name,
+                'phone'           => $consultation->phone,
+                'service'         => $consultation->service_name,
+                'session_type'    => $sessionType,
+                'preferred_time'  => $preferredTime,
+            ]
+        );
 
         // Build pre-formatted direct WhatsApp URL for instant conversion
         $methodLabel = $sessionType === 'online' ? 'Online (Zoom / Meet)' : 'Tatap Muka (Offline)';

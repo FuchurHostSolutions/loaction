@@ -105,6 +105,11 @@ cd /var/www/loaction && php artisan migrate --force && php artisan optimize
   - CRUD Target Audiens (`AudienceController`).
   - CRUD Skema Uji Kompetensi (`CompetencyController`).
   - CRUD Testimoni Klien (`TestimonialController`).
+- [x] **Fitur Log Aktivitas & Sistem (`/admin/logs`):**
+  - Model & Tabel `ActivityLog` (`activity_logs`) untuk audit trail lengkap.
+  - Pencatatan otomatis: login/logout/gagal masuk (`AuthController`), pendaftaran konsultasi baru dari frontend (`KontakController`), perubahan status & hapus data (`ConsultationController`), dan aktivitas CRUD master data (`ServiceController`, `AudienceController`, `CompetencyController`, `TestimonialController`).
+  - Antarmuka dual-tab: **Tab 1: Audit Trail Aktivitas** (filter kategori, pencarian kata kunci, pagination, detail JSON payload modal, fitur pembersihan log lama) & **Tab 2: Log Sistem Laravel (`laravel.log`)** (pemantau pesan error/warning real-time dan tombol pengosongan file log).
+  - Ringkasan widget aktivitas terbaru disematkan pada Dashboard admin.
 
 ### Fase 4: Integrasi Konten & SEO (SEDANG BERJALAN)
 - [x] Tampilkan data `$audiences` dan `$competencies` secara dinamis di `pages/home.blade.php`.

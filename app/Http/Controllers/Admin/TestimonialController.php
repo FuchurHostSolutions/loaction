@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Testimonial;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -31,13 +32,20 @@ class TestimonialController extends Controller
             'sort_order' => ['nullable', 'integer'],
         ]);
 
-        Testimonial::create([
+        $testimonial = Testimonial::create([
             'name'       => $validated['name'],
             'role'       => $validated['role'],
             'quote'      => $validated['quote'],
             'sort_order' => $validated['sort_order'] ?? 0,
             'is_active'  => $request->boolean('is_active', true),
         ]);
+
+        ActivityLog::record(
+            action: 'testimonial.create',
+            description: "Menambahkan testimoni baru dari: '{$testimonial->name}'.",
+            actionType: 'master_data',
+            subject: $testimonial
+        );
 
         return redirect()->route('admin.testimonials.index')->with('success', 'Testimoni baru berhasil ditambahkan.');
     }
@@ -68,13 +76,28 @@ class TestimonialController extends Controller
             'is_active'  => $request->boolean('is_active'),
         ]);
 
+        ActivityLog::record(
+            action: 'testimonial.update',
+            description: "Memperbarui testimoni dari: '{$testimonial->name}'.",
+            actionType: 'master_data',
+            subject: $testimonial
+        );
+
         return redirect()->route('admin.testimonials.index')->with('success', 'Testimoni berhasil diperbarui.');
     }
 
     public function destroy(int $id): RedirectResponse
     {
         $testimonial = Testimonial::findOrFail($id);
+        $name = $testimonial->name;
+        $testimonialId = $testimonial->id;
         $testimonial->delete();
+
+        ActivityLog::record(
+            action: 'testimonial.delete',
+            description: "Menghapus testimoni dari: '{$name}' (ID #{$testimonialId}).",
+            actionType: 'master_data'
+        );
 
         return redirect()->route('admin.testimonials.index')->with('success', 'Testimoni berhasil dihapus.');
     }

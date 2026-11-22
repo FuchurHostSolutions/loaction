@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Competency;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -31,13 +32,20 @@ class CompetencyController extends Controller
             'sort_order' => ['nullable', 'integer'],
         ]);
 
-        Competency::create([
+        $competency = Competency::create([
             'role'       => $validated['role'],
             'text'       => $validated['text'],
             'icon'       => $validated['icon'] ?: '👤',
             'sort_order' => $validated['sort_order'] ?? 0,
             'is_active'  => $request->boolean('is_active', true),
         ]);
+
+        ActivityLog::record(
+            action: 'competency.create',
+            description: "Menambahkan skema kompetensi baru: '{$competency->role}'.",
+            actionType: 'master_data',
+            subject: $competency
+        );
 
         return redirect()->route('admin.competencies.index')->with('success', 'Skema kompetensi baru berhasil ditambahkan.');
     }
@@ -68,13 +76,28 @@ class CompetencyController extends Controller
             'is_active'  => $request->boolean('is_active'),
         ]);
 
+        ActivityLog::record(
+            action: 'competency.update',
+            description: "Memperbarui skema kompetensi: '{$competency->role}'.",
+            actionType: 'master_data',
+            subject: $competency
+        );
+
         return redirect()->route('admin.competencies.index')->with('success', 'Skema kompetensi berhasil diperbarui.');
     }
 
     public function destroy(int $id): RedirectResponse
     {
         $competency = Competency::findOrFail($id);
+        $role = $competency->role;
+        $competencyId = $competency->id;
         $competency->delete();
+
+        ActivityLog::record(
+            action: 'competency.delete',
+            description: "Menghapus skema kompetensi: '{$role}' (ID #{$competencyId}).",
+            actionType: 'master_data'
+        );
 
         return redirect()->route('admin.competencies.index')->with('success', 'Skema kompetensi berhasil dihapus.');
     }

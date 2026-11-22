@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Consultation;
 use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
@@ -61,6 +62,7 @@ class ConsultationController extends Controller
         ]);
 
         $consultation = Consultation::findOrFail($id);
+        $oldStatus = $consultation->status;
         $consultation->update(['status' => $validated['status']]);
 
         $statusLabel = [
@@ -69,6 +71,19 @@ class ConsultationController extends Controller
             'cancelled' => 'Dibatalkan (Cancelled)',
         ][$validated['status']];
 
+        ActivityLog::record(
+            action: 'consultation.status_change',
+            description: "Status konsultasi #{$consultation->id} ({$consultation->name}) diubah dari '{$oldStatus}' menjadi '{$validated['status']}'.",
+            actionType: 'consultation',
+            subject: $consultation,
+            properties: [
+                'consultation_id' => $consultation->id,
+                'name'            => $consultation->name,
+                'old_status'      => $oldStatus,
+                'new_status'      => $validated['status'],
+            ]
+        );
+
         return back()->with('success', "Status konsultasi untuk {$consultation->name} berhasil diubah ke {$statusLabel}.");
     }
 
@@ -76,7 +91,18 @@ class ConsultationController extends Controller
     {
         $consultation = Consultation::findOrFail($id);
         $name = $consultation->name;
+        $consultationId = $consultation->id;
         $consultation->delete();
+
+        ActivityLog::record(
+            action: 'consultation.delete',
+            description: "Menghapus data konsultasi #{$consultationId} atas nama {$name}.",
+            actionType: 'consultation',
+            properties: [
+                'consultation_id' => $consultationId,
+                'name'            => $name,
+            ]
+        );
 
         return redirect()->route('admin.consultations.index')
             ->with('success', "Data konsultasi atas nama {$name} berhasil dihapus.");

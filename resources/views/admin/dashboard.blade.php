@@ -148,6 +148,42 @@
         @endif
     </div>
 
+    <!-- Recent Activity Logs Card -->
+    <div class="bg-white rounded-3xl p-6 shadow-sm ring-1 ring-slate-200/80">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-base font-extrabold text-ink">Aktivitas & Audit Trail Terbaru</h3>
+                <p class="text-xs text-warm-gray mt-0.5">Catatan tindakan admin, pendaftaran intake, dan perubahan status</p>
+            </div>
+            <a href="{{ route('admin.logs.index') }}" class="text-xs font-bold text-loaction-600 hover:text-loaction-700 transition flex items-center gap-1">
+                <span>Lihat Semua Log</span>
+                <span>&rarr;</span>
+            </a>
+        </div>
+
+        @if($recentActivities->isEmpty())
+            <p class="text-xs text-warm-gray py-4 text-center">Belum ada catatan aktivitas tercatat.</p>
+        @else
+            <div class="divide-y divide-slate-100">
+                @foreach($recentActivities as $act)
+                    <div class="py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs hover:bg-slate-50/60 rounded-xl px-2 transition">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[0.65rem] font-extrabold uppercase tracking-wider shrink-0 {{ $act->action_badge_class }}">
+                                {{ $act->action_type_label }}
+                            </span>
+                            <span class="font-bold text-ink truncate">{{ $act->description }}</span>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0 text-slate-400 font-mono text-[0.7rem]">
+                            <span>{{ $act->user_name ?? 'Sistem' }}</span>
+                            <span>&bull;</span>
+                            <span>{{ $act->created_at->diffForHumans() }}</span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+
     <!-- Quick Navigation Shortcuts -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <a href="{{ route('admin.services.index') }}" class="group bg-white rounded-2xl p-5 shadow-sm ring-1 ring-slate-200/80 hover:shadow-md transition flex items-center justify-between">

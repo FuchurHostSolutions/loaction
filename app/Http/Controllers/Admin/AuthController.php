@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -50,10 +51,26 @@ class AuthController extends Controller
 
         if (Auth::attempt(['email' => $email, 'password' => $credentials['password']], $remember)) {
             $request->session()->regenerate();
+            $user = Auth::user();
+
+            ActivityLog::record(
+                action: 'auth.login',
+                description: "Admin '{$user->name}' ({$user->email}) berhasil masuk ke portal admin.",
+                actionType: 'auth',
+                subject: $user,
+                properties: ['login_input' => $loginInput, 'remember' => $remember]
+            );
 
             return redirect()->intended(route('admin.dashboard'))
-                ->with('success', 'Selamat datang kembali, ' . Auth::user()->name . '!');
+                ->with('success', 'Selamat datang kembali, ' . $user->name . '!');
         }
+
+        ActivityLog::record(
+            action: 'auth.failed',
+            description: "Percobaan masuk gagal untuk kredensial login: '{$loginInput}'.",
+            actionType: 'auth',
+            properties: ['login_input' => $loginInput]
+        );
 
         return back()
             ->withInput($request->only('login', 'remember'))
@@ -62,6 +79,16 @@ class AuthController extends Controller
 
     public function logout(Request $request): RedirectResponse
     {
+        $user = Auth::user();
+        if ($user) {
+            ActivityLog::record(
+                action: 'auth.logout',
+                description: "Admin '{$user->name}' keluar dari portal admin.",
+                actionType: 'auth',
+                user: $user
+            );
+        }
+
         Auth::logout();
 
         $request->session()->invalidate();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Service;
 use App\Models\ServiceItem;
 use Illuminate\Http\RedirectResponse;
@@ -53,6 +54,13 @@ class ServiceController extends Controller
             }
         }
 
+        ActivityLog::record(
+            action: 'service.create',
+            description: "Menambahkan layanan baru: '{$service->title}'.",
+            actionType: 'master_data',
+            subject: $service
+        );
+
         return redirect()->route('admin.services.index')->with('success', "Layanan '{$service->title}' berhasil ditambahkan.");
     }
 
@@ -95,6 +103,13 @@ class ServiceController extends Controller
             }
         }
 
+        ActivityLog::record(
+            action: 'service.update',
+            description: "Memperbarui data layanan: '{$service->title}'.",
+            actionType: 'master_data',
+            subject: $service
+        );
+
         return redirect()->route('admin.services.index')->with('success', "Layanan '{$service->title}' berhasil diperbarui.");
     }
 
@@ -102,7 +117,14 @@ class ServiceController extends Controller
     {
         $service = Service::findOrFail($id);
         $title = $service->title;
+        $serviceId = $service->id;
         $service->delete();
+
+        ActivityLog::record(
+            action: 'service.delete',
+            description: "Menghapus layanan: '{$title}' (ID #{$serviceId}).",
+            actionType: 'master_data'
+        );
 
         return redirect()->route('admin.services.index')->with('success', "Layanan '{$title}' berhasil dihapus.");
     }

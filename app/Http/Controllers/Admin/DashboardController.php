@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Audience;
 use App\Models\Competency;
 use App\Models\Consultation;
@@ -30,6 +31,10 @@ class DashboardController extends Controller
             ->take(10)
             ->get();
 
-        return view('admin.dashboard', compact('stats', 'recentConsultations'));
+        $recentActivities = ActivityLog::latest()
+            ->take(6)
+            ->get();
+
+        return view('admin.dashboard', compact('stats', 'recentConsultations', 'recentActivities'));
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\CompetencyController;
 use App\Http\Controllers\Admin\ConsultationController as AdminConsultationController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\HomeController;
@@ -56,5 +57,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('audiences', AudienceController::class);
         Route::resource('competencies', CompetencyController::class);
         Route::resource('testimonials', TestimonialController::class);
+
+        // Activity & System Logs
+        Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
+        Route::post('/logs/purge', [LogController::class, 'purgeActivity'])->name('logs.purge');
+        Route::post('/logs/clear-system', [LogController::class, 'clearSystemLog'])->name('logs.clearSystem');
     });
 });
