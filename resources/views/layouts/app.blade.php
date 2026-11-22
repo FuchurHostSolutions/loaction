@@ -12,10 +12,48 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
-    <!-- Open Graph -->
+    <!-- Canonical & Robots -->
+    <link rel="canonical" href="{{ url()->current() }}">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:site_name" content="LoAction Biro Psikologi">
     <meta property="og:title" content="@yield('title', 'LoAction | Biro Psikologi Terapan')">
-    <meta property="og:description" content="Handle with care — Layanan psikologis untuk personal care, pendidikan, industri-organisasi, dan uji kompetensi SDM.">
+    <meta property="og:description" content="@yield('meta_description', 'Handle with care — Layanan psikologis untuk personal care, pendidikan, industri-organisasi, dan uji kompetensi SDM.')">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="{{ asset('images/logo.png') }}">
+    <meta property="og:locale" content="id_ID">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', 'LoAction | Biro Psikologi Terapan')">
+    <meta name="twitter:description" content="@yield('meta_description', 'Handle with care — Biro psikologi terapan terpercaya sejak 2017.')">
+    <meta name="twitter:image" content="{{ asset('images/logo.png') }}">
+
+    <!-- Schema.org JSON-LD Structured Data for Local & Professional Service SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "LoAction - Biro Psikologi Terapan",
+        "legalName": "Biro Psikologi LoAction",
+        "url": "{{ url('/') }}",
+        "logo": "{{ asset('images/logo.png') }}",
+        "image": "{{ asset('images/logo.png') }}",
+        "description": "Biro psikologi terapan berbadan hukum (SK Kemenkumham No. AHU-0001501.AH Tahun 2019) dengan tagline 'Handle with Care' melayani asesmen, konseling individu, psikotes sekolah, dan uji kompetensi SDM.",
+        "telephone": "+6281234567890",
+        "email": "hello@loaction.id",
+        "priceRange": "$$",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "ID"
+        },
+        "sameAs": [
+            "{{ $instagramUrl ?? 'https://www.instagram.com/loaction.id' }}"
+        ]
+    }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

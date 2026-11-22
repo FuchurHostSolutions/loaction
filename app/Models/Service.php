@@ -25,6 +25,12 @@ class Service extends Model
         'sort_order' => 'integer',
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(fn () => \Illuminate\Support\Facades\Cache::forget('loaction_public_home'));
+        static::deleted(fn () => \Illuminate\Support\Facades\Cache::forget('loaction_public_home'));
+    }
+
     public function items(): HasMany
     {
         return $this->hasMany(ServiceItem::class)->orderBy('sort_order');

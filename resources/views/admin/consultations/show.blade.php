@@ -58,11 +58,39 @@
                 </div>
 
                 <div>
-                    <span class="text-slate-400 uppercase tracking-wider font-extrabold block text-[0.65rem] mb-2">Catatan Klien / Keluhan Singkat</span>
+                    <span class="text-slate-400 uppercase tracking-wider font-extrabold block text-[0.65rem] mb-2">Pesan / Keluhan Klien</span>
                     <div class="bg-slate-50 p-5 rounded-2xl text-xs sm:text-sm text-ink leading-relaxed font-medium">
-                        {{ $consultation->notes ?: 'Tidak ada catatan tambahan dari klien.' }}
+                        {{ $consultation->message ?: ($consultation->notes ?: 'Tidak ada pesan tambahan dari klien.') }}
                     </div>
                 </div>
+            </div>
+
+            <!-- Internal Admin Notes Card -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm ring-1 ring-slate-200/80">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="text-base font-extrabold text-ink">Catatan Internal Admin</h3>
+                        <p class="text-xs text-warm-gray mt-0.5">Hanya dapat dilihat oleh admin & tim LoAction (tidak terlihat oleh klien)</p>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full text-[0.65rem] font-bold bg-slate-100 text-slate-600">Private</span>
+                </div>
+
+                <form method="POST" action="{{ route('admin.consultations.updateNotes', $consultation->id) }}" class="space-y-3">
+                    @csrf
+                    @method('PATCH')
+                    <textarea 
+                        name="admin_notes" 
+                        rows="4" 
+                        placeholder="Tambahkan catatan tindak lanjut, psikolog yang ditugaskan, atau kesepakatan jadwal konsultasi..."
+                        class="w-full p-4 rounded-2xl border border-slate-200 focus:border-loaction-500 focus:ring-2 focus:ring-loaction-100 text-xs sm:text-sm outline-none transition font-medium"
+                    >{{ old('admin_notes', $consultation->admin_notes) }}</textarea>
+
+                    <div class="flex justify-end">
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-loaction-500 hover:bg-loaction-600 text-white font-bold text-xs transition shadow-md">
+                            Simpan Catatan Internal
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 

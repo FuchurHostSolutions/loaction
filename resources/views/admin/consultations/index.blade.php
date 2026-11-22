@@ -26,27 +26,35 @@
             </a>
         </div>
 
-        <!-- Search input form -->
-        <form method="GET" action="{{ route('admin.consultations.index') }}" class="flex items-center gap-2">
-            @if(request('status'))
-                <input type="hidden" name="status" value="{{ request('status') }}">
-            @endif
-            <input 
-                type="text" 
-                name="q" 
-                placeholder="Cari nama, email, hp..." 
-                value="{{ request('q') }}" 
-                class="px-3.5 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold focus:border-loaction-500 focus:ring-1 focus:ring-loaction-500 outline-none w-56 sm:w-64"
-            >
-            <button type="submit" class="px-3 py-1.5 rounded-xl bg-loaction-500 hover:bg-loaction-600 text-white font-bold text-xs transition">
-                Cari
-            </button>
-            @if(request()->hasAny(['q', 'status', 'service_id']))
-                <a href="{{ route('admin.consultations.index') }}" class="px-2 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-xs text-ink font-bold transition" title="Reset filter">
-                    ✕
-                </a>
-            @endif
-        </form>
+        <div class="flex flex-wrap items-center gap-2">
+            <!-- Search input form -->
+            <form method="GET" action="{{ route('admin.consultations.index') }}" class="flex items-center gap-2">
+                @if(request('status'))
+                    <input type="hidden" name="status" value="{{ request('status') }}">
+                @endif
+                <input 
+                    type="text" 
+                    name="q" 
+                    placeholder="Cari nama, email, hp..." 
+                    value="{{ request('q') }}" 
+                    class="px-3.5 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold focus:border-loaction-500 focus:ring-1 focus:ring-loaction-500 outline-none w-48 sm:w-60"
+                >
+                <button type="submit" class="px-3 py-1.5 rounded-xl bg-loaction-500 hover:bg-loaction-600 text-white font-bold text-xs transition">
+                    Cari
+                </button>
+                @if(request()->hasAny(['q', 'status', 'service_id']))
+                    <a href="{{ route('admin.consultations.index') }}" class="px-2 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-xs text-ink font-bold transition" title="Reset filter">
+                        ✕
+                    </a>
+                @endif
+            </form>
+
+            <!-- Export CSV button -->
+            <a href="{{ route('admin.consultations.export', request()->query()) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition shadow-sm" title="Unduh data dalam format spreadsheet CSV/Excel">
+                <svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                <span>Export CSV</span>
+            </a>
+        </div>
     </div>
 
     <!-- Table Card -->

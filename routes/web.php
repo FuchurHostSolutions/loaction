@@ -26,6 +26,7 @@ Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
 Route::post('/kontak', [KontakController::class, 'submitConsultation'])
     ->middleware('throttle:5,1')
     ->name('consultation.submit');
+Route::get('/sitemap.xml', [HomeController::class, 'sitemap'])->name('sitemap');
 
 /*
 |--------------------------------------------------------------------------
@@ -48,8 +49,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Consultations (CRM Leads)
         Route::get('/consultations', [AdminConsultationController::class, 'index'])->name('consultations.index');
+        Route::get('/consultations/export', [AdminConsultationController::class, 'export'])->name('consultations.export');
         Route::get('/consultations/{id}', [AdminConsultationController::class, 'show'])->name('consultations.show');
         Route::patch('/consultations/{id}/status', [AdminConsultationController::class, 'updateStatus'])->name('consultations.updateStatus');
+        Route::patch('/consultations/{id}/notes', [AdminConsultationController::class, 'updateNotes'])->name('consultations.updateNotes');
         Route::delete('/consultations/{id}', [AdminConsultationController::class, 'destroy'])->name('consultations.destroy');
 
         // Master Data CRUD
