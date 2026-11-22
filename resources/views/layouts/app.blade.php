@@ -34,8 +34,8 @@
     <!-- Schema.org JSON-LD Structured Data for Local & Professional Service SEO -->
     <script type="application/ld+json">
     {!! json_encode([
-        '@context'    => 'https://schema.org',
-        '@type'       => 'ProfessionalService',
+        chr(64) . 'context'    => 'https://schema.org',
+        chr(64) . 'type'       => 'ProfessionalService',
         'name'        => 'LoAction - Biro Psikologi Terapan',
         'legalName'   => 'Biro Psikologi LoAction',
         'url'         => url('/'),
@@ -46,7 +46,7 @@
         'email'       => 'hello@loaction.id',
         'priceRange'  => '$$',
         'address'     => [
-            '@type'          => 'PostalAddress',
+            chr(64) . 'type' => 'PostalAddress',
             'addressCountry' => 'ID',
         ],
         'sameAs'      => [
