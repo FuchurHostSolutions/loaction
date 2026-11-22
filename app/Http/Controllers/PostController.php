@@ -42,6 +42,7 @@ class PostController extends Controller
         $posts = $query->paginate(9)->withQueryString();
 
         return view('pages.posts.index', [
+            ...$this->sharedData(),
             'posts'          => $posts,
             'featuredPost'   => $featuredPost,
             'categories'     => Post::CATEGORIES,
@@ -78,6 +79,7 @@ class PostController extends Controller
         }
 
         return view('pages.posts.show', [
+            ...$this->sharedData(),
             'post'         => $post,
             'relatedPosts' => $relatedPosts,
         ]);
