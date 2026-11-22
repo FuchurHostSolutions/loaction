@@ -110,6 +110,7 @@ cd /var/www/loaction && php artisan migrate --force && php artisan optimize
 - [x] **Fix Login Production:** 
   - Mengonfigurasi `trustProxies(at: '*')` di `bootstrap/app.php` dan `URL::forceScheme('https')` di `AppServiceProvider.php` agar Livewire mengenali skema HTTPS di balik reverse proxy Cloudflare. Sebelumnya, URL Livewire di-generate dengan `http://` sehingga browser memblokir request form login karena **Mixed Content** (HTTPS form to HTTP endpoint).
   - Mengatur permission `.env` ke `644` dan `SESSION_DOMAIN=null` agar cookie sesi tersimpan otomatis sesuai host domain.
+  - **Migrasi Cache ke Database (`CACHE_STORE=database`):** Livewire RateLimiter pada proses login sebelumnya gagal karena file cache locking (`storage/framework/cache/data`) terhambat permission mismatch antara user CLI dan PHP-FPM (`fopen ... No such file or directory`), yang menyebabkan form tertahan loading tanpa respon. Telah dibuatkan tabel `cache` & `cache_locks` di database sehingga proses autentikasi dan rate limiting 100% mulus dan langsung redirect ke `/admin`.
 - [x] **Fix Placeholder Login:** Hapus hint placeholder "admin@loaction.id atau iqbal" dari form login Filament.
 - [x] **Fix Icon Kompetensi:** Icon berhasil diganti dari heroicon class name ke emoji (👤👥💼✨) agar tampil di halaman Beranda.
 - [ ] Tambahkan Schema Markup JSON-LD `MedicalBusiness` di layout `app.blade.php`.
