@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Audience;
 use App\Models\Competency;
+use App\Models\Post;
 use App\Models\Service;
 use App\Models\Testimonial;
 use Illuminate\Http\Response;
@@ -21,6 +22,7 @@ class HomeController extends Controller
                 'testimonials' => Testimonial::active()->ordered()->get(),
                 'audiences'    => Audience::active()->ordered()->get(),
                 'competencies' => Competency::active()->ordered()->get(),
+                'latestPosts'  => Post::published()->latest('published_at')->take(3)->get(),
             ];
         });
 
@@ -32,7 +34,8 @@ class HomeController extends Controller
 
     public function sitemap(): Response
     {
-        $xml = view('pages.sitemap')->render();
+        $posts = Post::published()->latest('updated_at')->get();
+        $xml = view('pages.sitemap', compact('posts'))->render();
 
         return response($xml, 200, [
             'Content-Type'  => 'application/xml; charset=utf-8',

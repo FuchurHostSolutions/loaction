@@ -22,7 +22,11 @@ yarn-error.log
 !/storage/framework/testing/.gitkeep
 /storage/framework/views/*
 !/storage/framework/views/.gitkeep
+/storage/framework/*.php
 /storage/logs/*
 !/storage/logs/.gitkeep
 /bootstrap/cache/*.php
 agent.md
+/public/uploads/*
+!/public/uploads/.gitkeep
+!/public/uploads/posts/.gitkeep

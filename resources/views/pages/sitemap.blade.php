@@ -24,4 +24,20 @@
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
+    <url>
+        <loc>{{ route('posts.index') }}</loc>
+        <lastmod>{{ now()->toDateString() }}</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    @if(isset($posts))
+        @foreach($posts as $post)
+        <url>
+            <loc>{{ route('posts.show', $post->slug) }}</loc>
+            <lastmod>{{ $post->updated_at?->toDateString() ?? now()->toDateString() }}</lastmod>
+            <changefreq>weekly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        @endforeach
+    @endif
 </urlset>

@@ -108,6 +108,7 @@
                     <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Beranda</a>
                     <a class="nav-link {{ request()->routeIs('layanan') ? 'active' : '' }}" href="{{ route('layanan') }}">Layanan</a>
                     <a class="nav-link {{ request()->routeIs('profil') ? 'active' : '' }}" href="{{ route('profil') }}">Profil</a>
+                    <a class="nav-link {{ request()->routeIs('posts.*') ? 'active' : '' }}" href="{{ route('posts.index') }}">Artikel</a>
                     <a class="nav-link {{ request()->routeIs('kontak') ? 'active' : '' }}" href="{{ route('kontak') }}">Kontak</a>
                     <a href="{{ route('kontak') }}" class="ml-2 rounded-full bg-loaction-500 px-5 py-2.5 text-xs font-extrabold uppercase tracking-wide text-white shadow-md transition hover:-translate-y-0.5 hover:bg-loaction-600 hover:shadow-lg">
                         Konsultasi Gratis
@@ -130,6 +131,7 @@
             <a class="mobile-link rounded-xl px-4 py-3.5 text-sm font-extrabold transition {{ request()->routeIs('home') ? 'bg-loaction-50 text-loaction-600' : 'text-ink hover:bg-loaction-50' }}" href="{{ route('home') }}">Beranda</a>
             <a class="mobile-link rounded-xl px-4 py-3.5 text-sm font-extrabold transition {{ request()->routeIs('layanan') ? 'bg-loaction-50 text-loaction-600' : 'text-ink hover:bg-loaction-50' }}" href="{{ route('layanan') }}">Layanan</a>
             <a class="mobile-link rounded-xl px-4 py-3.5 text-sm font-extrabold transition {{ request()->routeIs('profil') ? 'bg-loaction-50 text-loaction-600' : 'text-ink hover:bg-loaction-50' }}" href="{{ route('profil') }}">Profil</a>
+            <a class="mobile-link rounded-xl px-4 py-3.5 text-sm font-extrabold transition {{ request()->routeIs('posts.*') ? 'bg-loaction-50 text-loaction-600' : 'text-ink hover:bg-loaction-50' }}" href="{{ route('posts.index') }}">Artikel</a>
             <a class="mobile-link rounded-xl px-4 py-3.5 text-sm font-extrabold transition {{ request()->routeIs('kontak') ? 'bg-loaction-50 text-loaction-600' : 'text-ink hover:bg-loaction-50' }}" href="{{ route('kontak') }}">Kontak</a>
         </div>
         <div class="mt-auto border-t border-loaction-100 p-5">
@@ -173,6 +175,7 @@
                         <a href="{{ route('home') }}" class="transition hover:text-white hover:translate-x-1">Beranda</a>
                         <a href="{{ route('layanan') }}" class="transition hover:text-white hover:translate-x-1">Layanan</a>
                         <a href="{{ route('profil') }}" class="transition hover:text-white hover:translate-x-1">Profil Biro</a>
+                        <a href="{{ route('posts.index') }}" class="transition hover:text-white hover:translate-x-1">Artikel & Edukasi</a>
                         <a href="{{ route('kontak') }}" class="transition hover:text-white hover:translate-x-1">Kontak</a>
                     </div>
                 </div>

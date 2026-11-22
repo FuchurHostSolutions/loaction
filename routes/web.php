@@ -6,11 +6,13 @@ use App\Http\Controllers\Admin\CompetencyController;
 use App\Http\Controllers\Admin\ConsultationController as AdminConsultationController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LogController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KontakController;
 use App\Http\Controllers\LayananController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +24,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/layanan', [LayananController::class, 'index'])->name('layanan');
 Route::get('/profil', [ProfilController::class, 'index'])->name('profil');
+Route::get('/artikel', [PostController::class, 'index'])->name('posts.index');
+Route::get('/artikel/{slug}', [PostController::class, 'show'])->name('posts.show');
 Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
 Route::post('/kontak', [KontakController::class, 'submitConsultation'])
     ->middleware('throttle:5,1')
@@ -56,6 +60,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/consultations/{id}', [AdminConsultationController::class, 'destroy'])->name('consultations.destroy');
 
         // Master Data CRUD
+        Route::resource('posts', AdminPostController::class);
         Route::resource('services', ServiceController::class);
         Route::resource('audiences', AudienceController::class);
         Route::resource('competencies', CompetencyController::class);

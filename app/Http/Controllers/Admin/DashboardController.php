@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Audience;
 use App\Models\Competency;
 use App\Models\Consultation;
+use App\Models\Post;
 use App\Models\Service;
 use App\Models\SiteVisit;
 use App\Models\Testimonial;
@@ -25,6 +26,8 @@ class DashboardController extends Controller
             'total_audiences'         => Audience::count(),
             'total_competencies'      => Competency::count(),
             'total_testimonials'      => Testimonial::count(),
+            'total_posts'             => Post::count(),
+            'published_posts'         => Post::where('is_published', true)->count(),
         ];
 
         // Statistik Pengunjung Website
