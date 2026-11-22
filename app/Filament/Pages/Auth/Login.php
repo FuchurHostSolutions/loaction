@@ -17,7 +17,6 @@ class Login extends BaseLogin
     {
         return TextInput::make('email')
             ->label('Email atau Username')
-            ->placeholder('admin@loaction.id atau iqbal')
             ->required()
             ->autocomplete('username')
             ->autofocus();

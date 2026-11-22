@@ -11,30 +11,37 @@ class CompetencySeeder extends Seeder
     {
         $competencies = [
             [
+                'role'       => 'Staff',
+                'text'       => 'Uji kompetensi dasar, potensi kerja, dan kesesuaian peran.',
+                'icon'       => '☑️',
+                'sort_order' => 0,
+                'is_active'  => true,
+            ],
+            [
                 'role'       => 'Level Staf',
                 'text'       => 'Uji kompetensi dasar kerja, kemampuan pemecahan masalah teknis, ketelitian, etika kerja, dan kesesuaian kultur organisasi.',
-                'icon'       => 'heroicon-o-user',
+                'icon'       => '👤',
                 'sort_order' => 1,
                 'is_active'  => true,
             ],
             [
                 'role'       => 'Level Supervisor',
                 'text'       => 'Evaluasi kemampuan supervisi, komunikasi tim, koordinasi operasional, problem solving cepat, dan kepemimpinan lini pertama.',
-                'icon'       => 'heroicon-o-user-group',
+                'icon'       => '👥',
                 'sort_order' => 2,
                 'is_active'  => true,
             ],
             [
                 'role'       => 'Level Manager',
                 'text'       => 'Pemetaan kompetensi manajerial strategis, pengambilan keputusan kritis, manajemen konflik, delegasi, dan kepemimpinan visi.',
-                'icon'       => 'heroicon-o-briefcase',
+                'icon'       => '💼',
                 'sort_order' => 3,
                 'is_active'  => true,
             ],
             [
                 'role'       => 'Level Eksekutif & Direksi',
                 'text'       => 'Asesmen kepemimpinan tingkat lanjut (strategic leadership), orientasi bisnis jangka panjang, integritas, dan manajemen transformasi organisasi.',
-                'icon'       => 'heroicon-o-sparkles',
+                'icon'       => '✨',
                 'sort_order' => 4,
                 'is_active'  => true,
             ],
