@@ -72,13 +72,18 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         @foreach($consultations as $c)
-                            <tr class="hover:bg-slate-50/70 transition">
+                            <tr class="transition {{ $c->status === 'pending' ? 'bg-amber-50/40 hover:bg-amber-50' : 'hover:bg-slate-50/70' }}">
                                 <td class="py-4 px-5 text-slate-400 font-mono text-[0.7rem]">
                                     #{{ $c->id }}
                                     <span class="block text-[0.65rem] text-slate-500">{{ $c->created_at->format('d/m/Y H:i') }}</span>
                                 </td>
                                 <td class="py-4 px-5">
-                                    <strong class="block font-bold text-ink text-sm">{{ $c->name }}</strong>
+                                    <div class="flex items-center gap-2">
+                                        @if($c->status === 'pending')
+                                            <span class="size-2 rounded-full bg-amber-500 animate-pulse shrink-0" title="Menunggu Ditangani"></span>
+                                        @endif
+                                        <strong class="font-bold text-ink text-sm">{{ $c->name }}</strong>
+                                    </div>
                                     <div class="flex items-center gap-2 text-slate-500 mt-0.5">
                                         <span class="font-mono text-[0.7rem]">{{ $c->phone }}</span>
                                         @if($c->email)

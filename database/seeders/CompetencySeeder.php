@@ -11,13 +11,6 @@ class CompetencySeeder extends Seeder
     {
         $competencies = [
             [
-                'role'       => 'Staff',
-                'text'       => 'Uji kompetensi dasar, potensi kerja, dan kesesuaian peran.',
-                'icon'       => '☑️',
-                'sort_order' => 0,
-                'is_active'  => true,
-            ],
-            [
                 'role'       => 'Level Staf',
                 'text'       => 'Uji kompetensi dasar kerja, kemampuan pemecahan masalah teknis, ketelitian, etika kerja, dan kesesuaian kultur organisasi.',
                 'icon'       => '👤',

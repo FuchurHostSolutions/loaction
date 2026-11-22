@@ -25,8 +25,9 @@ class DashboardController extends Controller
         ];
 
         $recentConsultations = Consultation::with('service')
+            ->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
             ->latest()
-            ->take(8)
+            ->take(10)
             ->get();
 
         return view('admin.dashboard', compact('stats', 'recentConsultations'));

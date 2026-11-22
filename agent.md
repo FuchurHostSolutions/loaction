@@ -22,7 +22,7 @@ Dokumen ini adalah acuan utama (single source of truth) untuk AI Agent dan penge
 | **PHP Lokal** | PHP 8.2 (XAMPP `C:\xampp\php\php.exe`) — **Wajib ada ekstensi `ext-intl`** |
 | **PHP Server** | PHP 8.4-FPM di Ubuntu/Debian server (`10.10.10.6`) |
 | **Frontend** | Tailwind CSS v4, Blade Templating, Vite |
-| **Admin Panel** | Filament v5 (`/admin`) |
+| **Admin Panel** | Custom Blade Admin Panel (`/admin`) dengan Tailwind CSS v4 & Lucide/Heroicon SVG |
 | **Database** | MariaDB/MySQL di server remote `10.10.10.6` via ZeroTier (Database: `loaction_db`) |
 | **Web Server Production**| Nginx di `/var/www/loaction` (`10.10.10.6`) |
 
@@ -99,6 +99,7 @@ cd /var/www/loaction && php artisan migrate --force && php artisan optimize
 - [x] **Custom Auth:** `App\Http\Controllers\Admin\AuthController` mendukung login via Email atau Username (`iqbal` / `admin`), kata sandi dengan toggle intip (show/hide), remember me, dan proteksi CSRF.
 - [x] **Custom Dashboard:** Ringkasan statistik operasional, intake konsultasi terbaru, dan pintasan cepat.
 - [x] **Manajemen Konsultasi (CRM Leads):** Daftar konsultasi dengan pencarian, filter status, tombol langsung Chat WhatsApp, aksi cepat ubah status, dan detail lengkap klien.
+- [x] **Prioritas Status Pending Teratas:** Data konsultasi di Dashboard dan Halaman Konsultasi memprioritaskan status `pending` di urutan paling atas (`CASE WHEN status = 'pending' THEN 0 ELSE 1 END`) dengan penanda visual pulsing amber badge dan background baris amber lembut agar segera di-notice admin.
 - [x] **Manajemen Konten (CRUD Master Data):**
   - CRUD Layanan (`ServiceController`) & Sub-item Layanan.
   - CRUD Target Audiens (`AudienceController`).

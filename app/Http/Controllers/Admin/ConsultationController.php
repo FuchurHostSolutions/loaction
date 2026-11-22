@@ -13,7 +13,9 @@ class ConsultationController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Consultation::with('service')->latest();
+        $query = Consultation::with('service')
+            ->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
+            ->latest();
 
         if ($request->filled('status') && $request->status !== 'all') {
             $query->where('status', $request->status);
