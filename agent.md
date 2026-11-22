@@ -94,15 +94,16 @@ cd /var/www/loaction && php artisan migrate --force && php artisan optimize
 - [x] **Enhancement Form Konsultasi:** Menambahkan field *Metode Sesi (Online / Offline)* dan *Preferensi Waktu* pada form dan database.
 - [x] **Spam Protection:** Pemasangan Honeypot (`b_address`) dan middleware `throttle:5,1` pada route `POST /kontak`.
 
-### Fase 3: Peningkatan Panel Admin Filament (SELESAI)
-- [x] **Aksi Cepat WhatsApp di Tabel Konsultasi:** Tombol aksi 1-klik untuk langsung membuka chat WhatsApp ke nomor klien beserta pesan salam resmi.
-- [x] **Aksi Cepat Update Status:** Tombol 1-klik untuk mengubah status konsultasi menjadi *Processed*.
-- [x] **Status Badge Colors:** Badge warna dinamis (`warning` untuk Pending, `success` untuk Processed, `danger` untuk Cancelled).
-- [x] **Filter Tabel Konsultasi:** Filter status, tipe layanan (`service_id`), dan metode sesi (`session_type`).
-- [x] **Resource Baru di Filament:**
-  - `AudienceResource` (mengelola target audiens / segmen pasar).
-  - `CompetencyResource` (mengelola skema uji kompetensi & asesmen SDM).
-- [x] **Autentikasi & Custom Login Page:** Mendukung login via Username atau Email, mengimplementasikan `FilamentUser` pada model `User` agar tidak terblokir (HTTP 403) di production.
+### Fase 3: Transisi ke Custom Admin Panel (SELESAI)
+- [x] **Deregistrasi Filament:** Mengganti Filament dengan Custom Admin Panel berbasis Blade, standard HTTP controllers, dan Tailwind CSS agar lebih fleksibel dan mudah ditambahkan fitur baru.
+- [x] **Custom Auth:** `App\Http\Controllers\Admin\AuthController` mendukung login via Email atau Username (`iqbal` / `admin`), kata sandi dengan toggle intip (show/hide), remember me, dan proteksi CSRF.
+- [x] **Custom Dashboard:** Ringkasan statistik operasional, intake konsultasi terbaru, dan pintasan cepat.
+- [x] **Manajemen Konsultasi (CRM Leads):** Daftar konsultasi dengan pencarian, filter status, tombol langsung Chat WhatsApp, aksi cepat ubah status, dan detail lengkap klien.
+- [x] **Manajemen Konten (CRUD Master Data):**
+  - CRUD Layanan (`ServiceController`) & Sub-item Layanan.
+  - CRUD Target Audiens (`AudienceController`).
+  - CRUD Skema Uji Kompetensi (`CompetencyController`).
+  - CRUD Testimoni Klien (`TestimonialController`).
 
 ### Fase 4: Integrasi Konten & SEO (SEDANG BERJALAN)
 - [x] Tampilkan data `$audiences` dan `$competencies` secara dinamis di `pages/home.blade.php`.
