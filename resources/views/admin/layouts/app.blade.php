@@ -20,7 +20,7 @@
         <!-- Mobile Header Bar -->
         <header class="lg:hidden bg-ink text-white flex items-center justify-between px-4 py-3 sticky top-0 z-40 shadow-sm">
             <div class="flex items-center gap-2.5">
-                <img src="{{ asset('images/logo.png') }}" alt="LoAction Logo" class="h-8 w-auto">
+                <img src="{{ asset('images/logo.png') }}" alt="LoAction Logo" class="h-8 w-auto max-h-8 shrink-0" style="max-height: 32px; width: auto;">
                 <span class="font-bold text-sm tracking-tight text-white">LoAction <span class="text-loaction-400">Admin</span></span>
             </div>
             <button type="button" id="mobileMenuBtn" class="p-2 text-white/80 hover:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-loaction-400" aria-label="Menu">
@@ -31,12 +31,12 @@
         <!-- Sidebar Navigation -->
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-ink text-white flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0 lg:static lg:h-screen lg:sticky lg:top-0 shrink-0">
             <!-- Brand header -->
-            <div class="h-16 flex items-center justify-between px-6 border-b border-white/10">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5">
-                    <img src="{{ asset('images/logo.png') }}" alt="LoAction Logo" class="h-8 w-auto">
-                    <div class="leading-tight">
-                        <span class="block font-bold text-sm tracking-tight text-white">LoAction</span>
-                        <span class="block text-[0.65rem] font-semibold tracking-wider uppercase text-loaction-400">Admin Portal</span>
+            <div class="h-16 flex items-center justify-between px-6 border-b border-white/10 shrink-0">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5 min-w-0">
+                    <img src="{{ asset('images/logo.png') }}" alt="LoAction Logo" class="h-8 w-auto max-h-8 shrink-0" style="max-height: 32px; width: auto;">
+                    <div class="leading-tight min-w-0">
+                        <span class="block font-bold text-sm tracking-tight text-white truncate">LoAction</span>
+                        <span class="block text-[0.65rem] font-semibold tracking-wider uppercase text-loaction-400 truncate">Admin Portal</span>
                     </div>
                 </a>
                 <button type="button" id="sidebarCloseBtn" class="lg:hidden text-white/70 hover:text-white p-1 rounded">

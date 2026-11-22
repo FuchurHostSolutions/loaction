@@ -19,7 +19,7 @@
         <!-- Logo and Brand -->
         <div class="text-center mb-8">
             <a href="{{ route('home') }}" class="inline-flex items-center gap-3">
-                <img src="{{ asset('images/logo.png') }}" alt="LoAction Logo" class="h-12 w-auto">
+                <img src="{{ asset('images/logo.png') }}" alt="LoAction Logo" class="h-12 w-auto max-h-12 shrink-0" style="max-height: 48px; width: auto;">
                 <div class="text-left">
                     <span class="block text-xl font-extrabold tracking-tight text-ink">LoAction</span>
                     <span class="block text-xs font-semibold text-loaction-600 tracking-wider uppercase">Biro Psikologi Terapan</span>
