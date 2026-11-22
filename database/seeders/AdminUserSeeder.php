@@ -20,7 +20,7 @@ class AdminUserSeeder extends Seeder
             [
                 'email'             => 'iqbal@loaction.id',
                 'name'              => 'Iqbal (Admin)',
-                'password'          => Hash::make('iqbal1234'),
+                'password'          => Hash::make('iqbal'),
                 'email_verified_at' => now(),
             ],
             [

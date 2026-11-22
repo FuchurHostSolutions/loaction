@@ -41,6 +41,13 @@ Dokumen ini adalah acuan utama (single source of truth) untuk AI Agent dan penge
 4. **Keamanan & Validasi:**
    * Semua form publik wajib dilindungi validasi ketat, CSRF token, dan rate limiting (`throttle`).
    * Jangan pernah meng-commit file kredensial `.env` atau folder cache runtime `storage/framework/*`.
+5. **Autentikasi Filament Panel (`/admin`):**
+   * Model `User.php` **wajib** mengimplementasikan `Filament\Models\Contracts\FilamentUser` dan method `canAccessPanel()` agar tidak terblokir (HTTP 403) pada environment production.
+   * Halaman login mendukung input fleksibel via **Email atau Username** (`App\Filament\Pages\Auth\Login`).
+   * Kredensial akun terdaftar:
+     * User: `iqbal` (atau `iqbal@loaction.id`) | Password: `iqbal`
+     * User: `admin` (atau `admin@loaction.id`) | Password: `admin1234`
+     * User: `psikolog@loaction.id` | Password: `psikolog1234`
 
 ---
 
@@ -95,6 +102,7 @@ cd /var/www/loaction && php artisan migrate --force && php artisan optimize
 - [x] **Resource Baru di Filament:**
   - `AudienceResource` (mengelola target audiens / segmen pasar).
   - `CompetencyResource` (mengelola skema uji kompetensi & asesmen SDM).
+- [x] **Autentikasi & Custom Login Page:** Mendukung login via Username atau Email, mengimplementasikan `FilamentUser` pada model `User` agar tidak terblokir (HTTP 403) di production.
 
 ### Fase 4: Integrasi Konten & SEO (SEDANG BERJALAN)
 - [x] Tampilkan data `$audiences` dan `$competencies` secara dinamis di `pages/home.blade.php`.
