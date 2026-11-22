@@ -20,7 +20,7 @@
         <!-- Mobile Header Bar -->
         <header class="lg:hidden bg-ink text-white flex items-center justify-between px-4 py-3 sticky top-0 z-40 shadow-sm">
             <div class="flex items-center gap-2.5">
-                <img src="{{ asset('images/logo.png') }}" alt="LoAction Logo" class="h-8 w-auto max-h-8 shrink-0" style="max-height: 32px; width: auto;">
+                <img src="{{ asset('images/logo.png') }}" alt="LoAction Logo" class="size-8 rounded-full object-cover shrink-0 shadow-sm" width="32" height="32" style="width: 32px; height: 32px; max-height: 32px; max-width: 32px; object-fit: cover; border-radius: 9999px;">
                 <span class="font-bold text-sm tracking-tight text-white">LoAction <span class="text-loaction-400">Admin</span></span>
             </div>
             <button type="button" id="mobileMenuBtn" class="p-2 text-white/80 hover:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-loaction-400" aria-label="Menu">
@@ -33,7 +33,7 @@
             <!-- Brand header -->
             <div class="h-16 flex items-center justify-between px-6 border-b border-white/10 shrink-0">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5 min-w-0">
-                    <img src="{{ asset('images/logo.png') }}" alt="LoAction Logo" class="h-8 w-auto max-h-8 shrink-0" style="max-height: 32px; width: auto;">
+                    <img src="{{ asset('images/logo.png') }}" alt="LoAction Logo" class="size-8 rounded-full object-cover shrink-0 shadow-sm" width="32" height="32" style="width: 32px; height: 32px; max-height: 32px; max-width: 32px; object-fit: cover; border-radius: 9999px;">
                     <div class="leading-tight min-w-0">
                         <span class="block font-bold text-sm tracking-tight text-white truncate">LoAction</span>
                         <span class="block text-[0.65rem] font-semibold tracking-wider uppercase text-loaction-400 truncate">Admin Portal</span>
