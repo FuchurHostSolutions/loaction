@@ -33,26 +33,26 @@
 
     <!-- Schema.org JSON-LD Structured Data for Local & Professional Service SEO -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "ProfessionalService",
-        "name": "LoAction - Biro Psikologi Terapan",
-        "legalName": "Biro Psikologi LoAction",
-        "url": "{{ url('/') }}",
-        "logo": "{{ asset('images/logo.png') }}",
-        "image": "{{ asset('images/logo.png') }}",
-        "description": "Biro psikologi terapan berbadan hukum (SK Kemenkumham No. AHU-0001501.AH Tahun 2019) dengan tagline 'Handle with Care' melayani asesmen, konseling individu, psikotes sekolah, dan uji kompetensi SDM.",
-        "telephone": "+6281234567890",
-        "email": "hello@loaction.id",
-        "priceRange": "$$",
-        "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "ID"
-        },
-        "sameAs": [
-            "{{ $instagramUrl ?? 'https://www.instagram.com/loaction.id' }}"
-        ]
-    }
+    {!! json_encode([
+        '@context'    => 'https://schema.org',
+        '@type'       => 'ProfessionalService',
+        'name'        => 'LoAction - Biro Psikologi Terapan',
+        'legalName'   => 'Biro Psikologi LoAction',
+        'url'         => url('/'),
+        'logo'        => asset('images/logo.png'),
+        'image'       => asset('images/logo.png'),
+        'description' => 'Biro psikologi terapan berbadan hukum (SK Kemenkumham No. AHU-0001501.AH Tahun 2019) dengan tagline \'Handle with Care\' melayani asesmen, konseling individu, psikotes sekolah, dan uji kompetensi SDM.',
+        'telephone'   => '+6281234567890',
+        'email'       => 'hello@loaction.id',
+        'priceRange'  => '$$',
+        'address'     => [
+            '@type'          => 'PostalAddress',
+            'addressCountry' => 'ID',
+        ],
+        'sameAs'      => [
+            $instagramUrl ?? 'https://www.instagram.com/loaction.id',
+        ],
+    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
