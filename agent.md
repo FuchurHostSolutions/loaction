@@ -106,6 +106,7 @@ cd /var/www/loaction && php artisan migrate --force && php artisan optimize
 
 ### Fase 4: Integrasi Konten & SEO (SEDANG BERJALAN)
 - [x] Tampilkan data `$audiences` dan `$competencies` secara dinamis di `pages/home.blade.php`.
+- [x] Optimasi responsivitas mobile-first pada halaman Beranda (penyesuaian padding layar kecil, touch target tombol adaptif, card grid responsif, perbaikan nesting tag HTML).
 - [ ] Tambahkan Schema Markup JSON-LD `MedicalBusiness` di layout `app.blade.php`.
 - [ ] Buat sitemap dinamis (`sitemap.xml`) dan `robots.txt`.
 
