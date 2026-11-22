@@ -47,6 +47,12 @@
                     <span>Log Sistem Laravel (laravel.log)</span>
                     <span class="px-2 py-0.5 rounded-full text-[0.65rem] {{ $tab === 'system' ? 'bg-loaction-100 text-loaction-700' : 'bg-slate-200 text-slate-600' }}">{{ $logFileSize }} KB</span>
                 </a>
+                <a href="{{ route('admin.logs.index', ['tab' => 'visitors']) }}" 
+                   class="px-4 py-3 border-b-2 font-bold text-xs uppercase tracking-wider transition flex items-center gap-2 {{ $tab === 'visitors' ? 'border-loaction-500 text-loaction-600 bg-white rounded-t-xl shadow-sm' : 'border-transparent text-warm-gray hover:text-ink' }}">
+                    <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
+                    <span>Log Kunjungan Website</span>
+                    <span class="px-2 py-0.5 rounded-full text-[0.65rem] {{ $tab === 'visitors' ? 'bg-loaction-100 text-loaction-700' : 'bg-slate-200 text-slate-600' }}">{{ $visitorStats['total_views'] }}</span>
+                </a>
             </div>
 
             <!-- Tab Quick Actions -->
@@ -184,7 +190,7 @@
                 </div>
             @endif
 
-        @else
+        @elseif($tab === 'system')
             <!-- Tab System Log (laravel.log) -->
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -222,6 +228,107 @@
                     </div>
                 @endif
             </div>
+
+        @else
+            <!-- Tab Visitor Logs (Site Visits) -->
+            <div class="p-6 border-b border-slate-100 bg-white">
+                <form method="GET" action="{{ route('admin.logs.index') }}" class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+                    <input type="hidden" name="tab" value="visitors">
+
+                    <!-- Search Input -->
+                    <div class="relative flex-1 max-w-md">
+                        <input 
+                            type="text" 
+                            name="q_visitor" 
+                            value="{{ request('q_visitor') }}" 
+                            placeholder="Cari alamat IP, URL, atau referer..." 
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-loaction-500 focus:ring-2 focus:ring-loaction-100 text-sm font-semibold outline-none transition placeholder:text-slate-400"
+                        >
+                        <svg class="size-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+                    </div>
+
+                    <!-- Device Filter Buttons -->
+                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+                        @php
+                            $currentDev = request('device', 'all');
+                            $devs = [
+                                'all'     => 'Semua',
+                                'desktop' => 'Desktop',
+                                'mobile'  => 'Mobile',
+                                'tablet'  => 'Tablet',
+                                'bot'     => 'Crawler/Bot',
+                            ];
+                        @endphp
+                        @foreach($devs as $val => $label)
+                            <a href="{{ route('admin.logs.index', array_merge(request()->query(), ['device' => $val, 'tab' => 'visitors'])) }}" 
+                               class="px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap {{ $currentDev === $val ? 'bg-loaction-500 text-white shadow-sm' : 'bg-slate-100 text-warm-gray hover:bg-slate-200 hover:text-ink' }}">
+                                {{ $label }}
+                            </a>
+                        @endforeach
+                    </div>
+                </form>
+            </div>
+
+            <!-- Table Visitor Logs -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-100 bg-slate-50/70 text-[0.7rem] font-extrabold uppercase tracking-wider text-warm-gray">
+                            <th class="py-3.5 px-6">Waktu</th>
+                            <th class="py-3.5 px-4">Alamat IP</th>
+                            <th class="py-3.5 px-6">Halaman Dikunjungi</th>
+                            <th class="py-3.5 px-4">Perangkat</th>
+                            <th class="py-3.5 px-6">Sumber / Referer</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm">
+                        @forelse($visitorLogs as $visit)
+                            <tr class="hover:bg-slate-50/70 transition">
+                                <td class="py-4 px-6 text-slate-500 whitespace-nowrap font-mono text-xs">
+                                    <span class="block font-bold text-ink">{{ $visit->created_at->format('d/m/Y H:i:s') }}</span>
+                                    <span class="text-[0.68rem] text-slate-400">{{ $visit->created_at->diffForHumans() }}</span>
+                                </td>
+                                <td class="py-4 px-4 whitespace-nowrap">
+                                    <span class="font-mono text-xs font-bold text-ink">{{ $visit->ip_address }}</span>
+                                </td>
+                                <td class="py-4 px-6">
+                                    <span class="font-bold text-xs text-ink block">{{ $visit->page_title }}</span>
+                                    <span class="font-mono text-[0.68rem] text-slate-400 block truncate max-w-xs">{{ $visit->url }}</span>
+                                </td>
+                                <td class="py-4 px-4 whitespace-nowrap">
+                                    @php
+                                        $devBadge = match($visit->device) {
+                                            'desktop' => 'bg-slate-100 text-slate-700 ring-slate-200',
+                                            'mobile'  => 'bg-indigo-50 text-indigo-700 ring-indigo-200',
+                                            'tablet'  => 'bg-purple-50 text-purple-700 ring-purple-200',
+                                            default   => 'bg-amber-50 text-amber-700 ring-amber-200',
+                                        };
+                                    @endphp
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[0.65rem] font-extrabold uppercase tracking-wider ring-1 {{ $devBadge }}">
+                                        {{ ucfirst($visit->device) }}
+                                    </span>
+                                </td>
+                                <td class="py-4 px-6 text-xs text-slate-500 font-mono truncate max-w-xs" title="{{ $visit->referer }}">
+                                    {{ $visit->referer ? (parse_url($visit->referer, PHP_URL_HOST) ?? $visit->referer) : 'Langsung (Direct / Bookmark)' }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="py-12 text-center text-warm-gray text-xs">
+                                    Belum ada catatan pengunjung yang cocok dengan filter.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Visitor Logs -->
+            @if($visitorLogs->hasPages())
+                <div class="p-6 border-t border-slate-100 bg-slate-50/50">
+                    {{ $visitorLogs->links() }}
+                </div>
+            @endif
         @endif
     </div>
 </div>

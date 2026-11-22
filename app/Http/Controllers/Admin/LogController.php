@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\SiteVisit;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -51,12 +52,36 @@ class LogController extends Controller
             $systemLogs = $this->parseLaravelLog($logPath, 150);
         }
 
+        // Tab 3: Visitor Logs (Site Visits)
+        $visitorQuery = SiteVisit::latest();
+        if ($request->filled('device') && $request->device !== 'all') {
+            $visitorQuery->where('device', $request->device);
+        }
+        if ($request->filled('q_visitor')) {
+            $vSearch = '%' . trim($request->q_visitor) . '%';
+            $visitorQuery->where(function ($q) use ($vSearch) {
+                $q->where('ip_address', 'like', $vSearch)
+                    ->orWhere('url', 'like', $vSearch)
+                    ->orWhere('referer', 'like', $vSearch);
+            });
+        }
+        $visitorLogs = $visitorQuery->paginate(25, ['*'], 'visitor_page')->withQueryString();
+
+        $visitorStats = [
+            'total_views'     => SiteVisit::count(),
+            'unique_visitors' => SiteVisit::distinct('ip_address')->count('ip_address'),
+            'today_views'     => SiteVisit::whereDate('visited_date', today())->count(),
+            'today_uniques'   => SiteVisit::whereDate('visited_date', today())->distinct('ip_address')->count('ip_address'),
+        ];
+
         return view('admin.logs.index', compact(
             'tab',
             'activityLogs',
             'stats',
             'systemLogs',
-            'logFileSize'
+            'logFileSize',
+            'visitorLogs',
+            'visitorStats'
         ));
     }
 

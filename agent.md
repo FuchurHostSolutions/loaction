@@ -110,6 +110,16 @@ cd /var/www/loaction && php artisan migrate --force && php artisan optimize
   - Pencatatan otomatis: login/logout/gagal masuk (`AuthController`), pendaftaran konsultasi baru dari frontend (`KontakController`), perubahan status & hapus data (`ConsultationController`), dan aktivitas CRUD master data (`ServiceController`, `AudienceController`, `CompetencyController`, `TestimonialController`).
   - Antarmuka dual-tab: **Tab 1: Audit Trail Aktivitas** (filter kategori, pencarian kata kunci, pagination, detail JSON payload modal, fitur pembersihan log lama) & **Tab 2: Log Sistem Laravel (`laravel.log`)** (pemantau pesan error/warning real-time dan tombol pengosongan file log).
   - Ringkasan widget aktivitas terbaru disematkan pada Dashboard admin.
+- [x] **Fitur Visitor Counter & Traffic Analytics:**
+  - Model & Tabel `SiteVisit` (`site_visits`) untuk melacak metrik kunjungan website.
+  - Middleware `TrackVisitor` (`App\Http\Middleware\TrackVisitor`) otomatis mencatat setiap kunjungan halaman publik (GET 200 OK) dengan debounce anti-spam (3 menit) dan pengecualian route admin.
+  - Deteksi perangkat otomatis (Desktop, Mobile, Tablet, Search Bot).
+  - **Dashboard Analytics Widget:**
+    - 4 Card Metrik Kunjungan: Total Kunjungan (Pageviews), Pengunjung Unik (Unique IP), Kunjungan Hari Ini, dan Akumulasi 7 Hari Terakhir.
+    - Grafik batang tren kunjungan 7 hari terakhir (*live volume chart*).
+    - Top 5 Halaman Terpopuler (Beranda, Layanan, Profil, Kontak) dengan hit count.
+    - Distribusi perangkat pengunjung (Desktop vs Smartphone).
+  - **Tab Log Pengunjung di `/admin/logs`:** Tab khusus untuk menginspeksi log hit kunjungan mentah (Waktu, IP, Halaman, Perangkat, Referer/Sumber).
 
 ### Fase 4: Integrasi Konten & SEO (SEDANG BERJALAN)
 - [x] Tampilkan data `$audiences` dan `$competencies` secara dinamis di `pages/home.blade.php`.
