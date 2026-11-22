@@ -10,4 +10,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/layanan', [LayananController::class, 'index'])->name('layanan');
 Route::get('/profil', [ProfilController::class, 'index'])->name('profil');
 Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
-Route::post('/kontak', [KontakController::class, 'submitConsultation'])->name('consultation.submit');
+Route::post('/kontak', [KontakController::class, 'submitConsultation'])
+    ->middleware('throttle:5,1')
+    ->name('consultation.submit');

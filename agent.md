@@ -82,22 +82,22 @@ cd /var/www/loaction && php artisan migrate --force && php artisan optimize
 - [x] Membersihkan duplikasi route dan unused imports di `routes/web.php`.
 - [x] Memperbaiki `$PROFILE` PowerShell agar otomatis memprioritaskan PHP XAMPP.
 
-### Fase 2: Peningkatan UX & Konversi Leads (DALAM PROGRESS / PRIORITAS BERIKUTNYA)
-- [ ] **Direct WhatsApp Action:** Tambahkan modal/tombol langsung ke WhatsApp setelah submit form konsultasi dengan pesan pra-isi.
-- [ ] **Enhancement Form Konsultasi:** Tambah opsi *Metode Sesi (Online/Offline)* dan *Preferensi Waktu*.
-- [ ] **Spam Protection:** Pasang Honeypot dan middleware `throttle:5,1` pada route `POST /kontak`.
+### Fase 2: Peningkatan UX & Konversi Leads (SELESAI)
+- [x] **Direct WhatsApp Action:** Tombol langsung ke WhatsApp di banner sukses pasca-submit form konsultasi dengan pesan pra-isi otomatis.
+- [x] **Enhancement Form Konsultasi:** Menambahkan field *Metode Sesi (Online / Offline)* dan *Preferensi Waktu* pada form dan database.
+- [x] **Spam Protection:** Pemasangan Honeypot (`b_address`) dan middleware `throttle:5,1` pada route `POST /kontak`.
 
-### Fase 3: Peningkatan Panel Admin Filament
-- [ ] **Aksi Cepat WhatsApp di Tabel Konsultasi:** Tombol 1-klik untuk langsung chat ke nomor klien.
-- [ ] **Status Badge Colors:** Warna `warning` (Pending), `success` (Processed), `danger` (Cancelled).
-- [ ] **Filter Status & Layanan:** Mempermudah admin menyaring leads yang belum diproses.
-- [ ] **Resource Baru di Filament:**
-  - `AudienceResource` (mengelola target audiens).
-  - `CompetencyResource` (mengelola skema uji kompetensi).
-  - `UserResource` (mengelola akun admin & psikolog).
+### Fase 3: Peningkatan Panel Admin Filament (SELESAI)
+- [x] **Aksi Cepat WhatsApp di Tabel Konsultasi:** Tombol aksi 1-klik untuk langsung membuka chat WhatsApp ke nomor klien beserta pesan salam resmi.
+- [x] **Aksi Cepat Update Status:** Tombol 1-klik untuk mengubah status konsultasi menjadi *Processed*.
+- [x] **Status Badge Colors:** Badge warna dinamis (`warning` untuk Pending, `success` untuk Processed, `danger` untuk Cancelled).
+- [x] **Filter Tabel Konsultasi:** Filter status, tipe layanan (`service_id`), dan metode sesi (`session_type`).
+- [x] **Resource Baru di Filament:**
+  - `AudienceResource` (mengelola target audiens / segmen pasar).
+  - `CompetencyResource` (mengelola skema uji kompetensi & asesmen SDM).
 
-### Fase 4: Integrasi Konten & SEO
-- [ ] Tampilkan data `$audiences` dan `$competencies` secara dinamis di `pages/home.blade.php`.
+### Fase 4: Integrasi Konten & SEO (SEDANG BERJALAN)
+- [x] Tampilkan data `$audiences` dan `$competencies` secara dinamis di `pages/home.blade.php`.
 - [ ] Tambahkan Schema Markup JSON-LD `MedicalBusiness` di layout `app.blade.php`.
 - [ ] Buat sitemap dinamis (`sitemap.xml`) dan `robots.txt`.
 

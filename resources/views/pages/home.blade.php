@@ -167,20 +167,23 @@
 
             <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 @php
-                    $audiences = [
-                        ['icon' => '<svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>', 'title' => 'Individu', 'desc' => 'Konseling personal, tes IQ, minat bakat, dan psikoedukasi untuk pengembangan diri.'],
-                        ['icon' => '<svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" /></svg>', 'title' => 'Keluarga', 'desc' => 'Konseling keluarga untuk menyelesaikan konflik dan membangun komunikasi yang sehat.'],
-                        ['icon' => '<svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" /></svg>', 'title' => 'Institusi Pendidikan', 'desc' => 'Tes kesiapan sekolah, minat bakat siswa, dan pelatihan untuk guru dan sekolah.'],
-                        ['icon' => '<svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" /></svg>', 'title' => 'Organisasi', 'desc' => 'Rekrutmen, assessment, coaching, dan uji kompetensi SDM untuk perusahaan.'],
+                    $audienceIcons = [
+                        '<svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>',
+                        '<svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" /></svg>',
+                        '<svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" /></svg>',
+                        '<svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" /></svg>',
+                        '<svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-.778.099-1.533.284-2.253" /></svg>',
                     ];
                 @endphp
                 @foreach ($audiences as $index => $audience)
                     <article class="audience-card reveal" style="transition-delay: {{ $index * 100 }}ms;">
                         <div class="audience-icon">
-                            <span class="flex items-center justify-center text-loaction-600">{!! $audience['icon'] !!}</span>
+                            <span class="flex items-center justify-center text-loaction-600">
+                                {!! $audienceIcons[$index % count($audienceIcons)] !!}
+                            </span>
                         </div>
-                        <h3 class="mt-4 text-lg font-extrabold text-ink">{{ $audience['title'] }}</h3>
-                        <p class="mt-2 text-sm leading-7 text-warm-gray">{{ $audience['desc'] }}</p>
+                        <h3 class="mt-4 text-lg font-extrabold text-ink">{{ $audience->title ?? $audience['title'] }}</h3>
+                        <p class="mt-2 text-sm leading-7 text-warm-gray">{{ $audience->text ?? $audience['desc'] }}</p>
                         <a href="{{ route('layanan') }}" class="mt-4 inline-flex items-center gap-1 text-sm font-bold text-loaction-500 transition hover:gap-2 hover:text-loaction-700">
                             Pelajari
                             <svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
@@ -188,6 +191,44 @@
                     </article>
                 @endforeach
             </div>
+        </div>
+    </section>
+
+    {{-- ═══ SKEMA UJI KOMPETENSI ═══ --}}
+    @if(isset($competencies) && $competencies->isNotEmpty())
+    <section class="section-pad bg-gradient-to-b from-white to-soft-bg">
+        <div class="section-container">
+            <div class="mx-auto max-w-3xl text-center reveal">
+                <p class="eyebrow justify-center">Sertifikasi & Pemetaan SDM</p>
+                <h2 class="heading-2">Skema Uji Kompetensi Profesional</h2>
+                <p class="mt-4 text-base text-warm-gray lg:text-lg">Pengukuran kompetensi kerja terstandar untuk berbagai jenjang karier organisasi guna memastikan kesiapan dan daya saing SDM.</p>
+            </div>
+
+            <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 reveal">
+                @foreach ($competencies as $index => $comp)
+                    <div class="flex flex-col rounded-3xl bg-white p-7 shadow-sm ring-1 ring-loaction-100/60 transition duration-300 hover:-translate-y-1 hover:shadow-card" style="transition-delay: {{ $index * 100 }}ms;">
+                        <div class="flex items-center justify-between">
+                            <span class="inline-flex size-11 items-center justify-center rounded-2xl bg-loaction-100 text-lg font-extrabold text-loaction-600">
+                                {{ $comp->icon ?: '✓' }}
+                            </span>
+                            <span class="rounded-full bg-loaction-50 px-3 py-1 text-[0.65rem] font-extrabold uppercase tracking-wider text-loaction-700 ring-1 ring-loaction-200/50">
+                                Skema {{ $index + 1 }}
+                            </span>
+                        </div>
+                        <h3 class="mt-5 text-xl font-extrabold text-ink">{{ $comp->role }}</h3>
+                        <p class="mt-3 text-sm leading-relaxed text-warm-gray flex-1">{{ $comp->text }}</p>
+                        <div class="mt-6 border-t border-loaction-100/60 pt-4">
+                            <a href="{{ route('kontak') }}" class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-loaction-600 transition hover:text-loaction-700">
+                                Ajukan Kebutuhan
+                                <svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
         </div>
     </section>
 

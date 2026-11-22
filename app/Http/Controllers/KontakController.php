@@ -20,35 +20,70 @@ class KontakController extends Controller
 
     public function submitConsultation(Request $request): RedirectResponse
     {
+        // Honeypot spam protection
+        if ($request->filled('b_address')) {
+            return back()->with('status', 'Permintaan Anda telah kami terima.');
+        }
+
         $validated = $request->validate([
-            'name'    => ['required', 'string', 'max:120'],
-            'email'   => ['nullable', 'email', 'max:160'],
-            'phone'   => ['required', 'string', 'max:30'],
-            'service' => ['required', 'string', 'max:80'],
-            'message' => ['nullable', 'string', 'max:1000'],
+            'name'           => ['required', 'string', 'max:120'],
+            'email'          => ['nullable', 'email', 'max:160'],
+            'phone'          => ['required', 'string', 'max:30'],
+            'service'        => ['required', 'string', 'max:80'],
+            'session_type'   => ['nullable', 'in:offline,online'],
+            'preferred_time' => ['nullable', 'in:pagi,siang,sore,fleksibel'],
+            'message'        => ['nullable', 'string', 'max:1000'],
         ], [
-            'name.required'    => 'Nama wajib diisi.',
+            'name.required'    => 'Nama lengkap wajib diisi.',
             'phone.required'   => 'Nomor WhatsApp wajib diisi.',
-            'service.required' => 'Pilih salah satu layanan.',
-            'email.email'      => 'Format email belum valid.',
+            'service.required' => 'Pilih salah satu layanan yang dibutuhkan.',
+            'email.email'      => 'Format alamat email belum valid.',
         ]);
 
-        // Find the service by title to link the FK
+        // Find service by title to link FK if exists
         $service = Service::where('title', $validated['service'])->first();
 
-        Consultation::create([
-            'name'         => $validated['name'],
-            'email'        => $validated['email'] ?? null,
-            'phone'        => $validated['phone'],
-            'service_id'   => $service?->id,
-            'service_name' => $validated['service'],
-            'message'      => $validated['message'] ?? null,
-            'status'       => 'pending',
+        $sessionType = $validated['session_type'] ?? 'offline';
+        $preferredTime = $validated['preferred_time'] ?? 'fleksibel';
+
+        $consultation = Consultation::create([
+            'name'           => $validated['name'],
+            'email'          => $validated['email'] ?? null,
+            'phone'          => $validated['phone'],
+            'service_id'     => $service?->id,
+            'service_name'   => $validated['service'],
+            'session_type'   => $sessionType,
+            'preferred_time' => $preferredTime,
+            'message'        => $validated['message'] ?? null,
+            'status'         => 'pending',
         ]);
 
-        return back()->with(
-            'status',
-            'Terima kasih, '.$validated['name'].'. Permintaan konsultasi untuk "'.$validated['service'].'" berhasil dikirim. Tim LoAction akan segera menghubungi Anda.'
-        );
+        // Build pre-formatted direct WhatsApp URL for instant conversion
+        $methodLabel = $sessionType === 'online' ? 'Online (Zoom / Meet)' : 'Tatap Muka (Offline)';
+        $timeLabel = match ($preferredTime) {
+            'pagi'      => 'Pagi (09:00 - 12:00)',
+            'siang'     => 'Siang (13:00 - 15:00)',
+            'sore'      => 'Sore (16:00 - 18:00)',
+            default     => 'Fleksibel',
+        };
+
+        $waText = "Halo LoAction, saya sudah mengisi form konsultasi di website:\n\n"
+            . "• Nama: {$consultation->name}\n"
+            . "• WhatsApp: {$consultation->phone}\n"
+            . "• Layanan: {$consultation->service_name}\n"
+            . "• Metode: {$methodLabel}\n"
+            . "• Waktu: {$timeLabel}\n"
+            . (!empty($consultation->message) ? "• Pesan: {$consultation->message}\n\n" : "\n")
+            . "Mohon info ketersediaan jadwal terdekat. Terima kasih.";
+
+        // WhatsApp admin number
+        $waUrl = "https://wa.me/6281234567890?text=" . rawurlencode($waText);
+
+        return back()->with([
+            'status'       => 'Terima kasih, ' . $validated['name'] . '. Permintaan konsultasi Anda untuk "' . $validated['service'] . '" telah tercatat di sistem kami.',
+            'whatsapp_url' => $waUrl,
+            'client_name'  => $validated['name'],
+            'service_name' => $validated['service'],
+        ]);
     }
 }
