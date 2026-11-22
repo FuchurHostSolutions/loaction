@@ -107,6 +107,9 @@ cd /var/www/loaction && php artisan migrate --force && php artisan optimize
 ### Fase 4: Integrasi Konten & SEO (SEDANG BERJALAN)
 - [x] Tampilkan data `$audiences` dan `$competencies` secara dinamis di `pages/home.blade.php`.
 - [x] Optimasi responsivitas mobile-first pada halaman Beranda (penyesuaian padding layar kecil, touch target tombol adaptif, card grid responsif, perbaikan nesting tag HTML).
+- [x] **Fix Login Production:** `APP_URL` dan `SESSION_DOMAIN` di server diperbarui ke domain `loaction.buildsys.site` agar Livewire/CSRF/session match dan login berfungsi.
+- [x] **Fix Placeholder Login:** Hapus hint placeholder "admin@loaction.id atau iqbal" dari form login Filament.
+- [x] **Fix Icon Kompetensi:** Icon berhasil diganti dari heroicon class name ke emoji (👤👥💼✨) agar tampil di halaman Beranda.
 - [ ] Tambahkan Schema Markup JSON-LD `MedicalBusiness` di layout `app.blade.php`.
 - [ ] Buat sitemap dinamis (`sitemap.xml`) dan `robots.txt`.
 
