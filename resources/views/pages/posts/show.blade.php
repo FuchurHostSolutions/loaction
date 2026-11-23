@@ -140,7 +140,16 @@
                         <a href="{{ route('kontak') }}" class="rounded-full bg-white px-6 py-2.5 text-xs font-extrabold uppercase tracking-wider text-loaction-600 shadow-md hover:bg-loaction-50 transition">
                             Konsultasikan Sekarang
                         </a>
-                        <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener" class="rounded-full bg-ink/30 px-5 py-2.5 text-xs font-bold text-white ring-1 ring-white/30 hover:bg-ink/50 transition">
+                        <a 
+                            href="{{ count($whatsappNumbers) > 1 ? 'javascript:void(0)' : $whatsappUrl }}" 
+                            @if(count($whatsappNumbers) > 1) 
+                                onclick="toggleWaMultiPopup(event)" 
+                            @else 
+                                target="_blank" 
+                                rel="noopener" 
+                            @endif
+                            class="rounded-full bg-ink/30 px-5 py-2.5 text-xs font-bold text-white ring-1 ring-white/30 hover:bg-ink/50 transition cursor-pointer"
+                        >
                             Chat WhatsApp &rarr;
                         </a>
                     </div>

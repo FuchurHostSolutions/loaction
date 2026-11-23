@@ -22,9 +22,10 @@ class AppServiceProvider extends ServiceProvider
         // Share dynamic settings & social URLs with all views globally
         View::composer('*', function ($view) {
             $view->with([
-                'siteSettings' => \App\Models\Setting::getAllSettings(),
-                'whatsappUrl'  => \App\Models\Setting::whatsappUrl(),
-                'instagramUrl' => \App\Models\Setting::instagramUrl(),
+                'siteSettings'    => \App\Models\Setting::getAllSettings(),
+                'whatsappUrl'     => \App\Models\Setting::whatsappUrl(),
+                'whatsappNumbers' => \App\Models\Setting::whatsappNumbers(),
+                'instagramUrl'    => \App\Models\Setting::instagramUrl(),
             ]);
         });
     }

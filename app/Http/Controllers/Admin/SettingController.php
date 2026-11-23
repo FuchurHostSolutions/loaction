@@ -37,9 +37,10 @@ class SettingController extends Controller
             'about_excerpt'            => ['nullable', 'string', 'max:1000'],
 
             // Contact
-            'whatsapp_number'          => ['required', 'string', 'max:50'],
+            'whatsapp_number'          => ['nullable', 'string', 'max:50'],
             'whatsapp_display'         => ['nullable', 'string', 'max:50'],
             'whatsapp_default_message' => ['nullable', 'string', 'max:500'],
+            'whatsapp_numbers'         => ['nullable'],
             'email'                    => ['required', 'email', 'max:255'],
             'phone'                    => ['nullable', 'string', 'max:50'],
 
@@ -79,8 +80,46 @@ class SettingController extends Controller
         ];
 
         foreach ($validated as $key => $value) {
+            if ($key === 'whatsapp_numbers') {
+                continue;
+            }
             $group = $groups[$key] ?? 'general';
             Setting::set($key, $value, $group);
+        }
+
+        // Process Multiple WhatsApp Numbers
+        $waList = [];
+        $rawWaInput = $request->input('whatsapp_numbers');
+
+        if (is_string($rawWaInput)) {
+            $rawWaInput = json_decode($rawWaInput, true) ?: [];
+        }
+
+        if (is_array($rawWaInput)) {
+            foreach ($rawWaInput as $idx => $wa) {
+                $num = trim((string) ($wa['number'] ?? ''));
+                if ($num !== '') {
+                    $waList[] = [
+                        'label'   => trim((string) ($wa['label'] ?? '')) ?: ('Customer Service ' . ($idx + 1)),
+                        'number'  => $num,
+                        'display' => trim((string) ($wa['display'] ?? '')) ?: $num,
+                    ];
+                }
+            }
+        }
+
+        if (empty($waList) && !empty($request->input('whatsapp_number'))) {
+            $waList[] = [
+                'label'   => 'Customer Service',
+                'number'  => trim((string) $request->input('whatsapp_number')),
+                'display' => trim((string) $request->input('whatsapp_display')) ?: trim((string) $request->input('whatsapp_number')),
+            ];
+        }
+
+        if (!empty($waList)) {
+            Setting::set('whatsapp_numbers', json_encode($waList), 'contact', 'json');
+            Setting::set('whatsapp_number', $waList[0]['number'], 'contact');
+            Setting::set('whatsapp_display', $waList[0]['display'], 'contact');
         }
 
         // Clear public page caches so updates reflect immediately

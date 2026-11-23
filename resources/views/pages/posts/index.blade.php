@@ -195,7 +195,16 @@
                 <a href="{{ route('kontak') }}" class="rounded-full bg-white px-7 py-3.5 text-xs font-black uppercase tracking-wider text-loaction-600 shadow-xl transition hover:-translate-y-0.5 hover:bg-loaction-50">
                     Jadwalkan Konsultasi Gratis
                 </a>
-                <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener" class="rounded-full bg-ink/30 px-6 py-3.5 text-xs font-bold text-white ring-1 ring-white/30 backdrop-blur transition hover:bg-ink/50">
+                <a 
+                    href="{{ count($whatsappNumbers) > 1 ? 'javascript:void(0)' : $whatsappUrl }}" 
+                    @if(count($whatsappNumbers) > 1) 
+                        onclick="toggleWaMultiPopup(event)" 
+                    @else 
+                        target="_blank" 
+                        rel="noopener" 
+                    @endif
+                    class="rounded-full bg-ink/30 px-6 py-3.5 text-xs font-bold text-white ring-1 ring-white/30 backdrop-blur transition hover:bg-ink/50 cursor-pointer"
+                >
                     Tanya Admin via WhatsApp &rarr;
                 </a>
             </div>

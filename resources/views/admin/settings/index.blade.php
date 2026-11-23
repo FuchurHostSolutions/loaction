@@ -5,6 +5,27 @@
 @section('page_description', 'Kelola informasi kontak, WhatsApp, sosial media, jam operasional, identitas, dan SEO website secara terpusat')
 
 @section('content')
+@php
+    $oldWa = old('whatsapp_numbers');
+    if (is_array($oldWa) && !empty($oldWa)) {
+        $waList = [];
+        foreach ($oldWa as $idx => $wa) {
+            $num = $wa['number'] ?? '';
+            $clean = preg_replace('/[^0-9]/', '', (string)$num);
+            if (str_starts_with($clean, '0')) $clean = '62' . substr($clean, 1);
+            $waList[] = [
+                'number' => $num,
+                'clean_number' => $clean,
+                'label' => $wa['label'] ?? ('Customer Service ' . ($idx + 1)),
+                'display' => $wa['display'] ?? $num,
+                'url' => 'https://wa.me/' . $clean,
+                'is_primary' => $idx === 0,
+            ];
+        }
+    } else {
+        $waList = \App\Models\Setting::whatsappNumbers();
+    }
+@endphp
     <div class="max-w-5xl">
         <form method="POST" action="{{ route('admin.settings.update') }}" class="space-y-6" id="settingsForm">
             @csrf
@@ -60,44 +81,94 @@
 
             <!-- TAB 1: KONTAK & WHATSAPP -->
             <div id="tab-contact" class="tab-content bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm ring-1 ring-slate-200/80 space-y-6">
-                <div>
-                    <h3 class="text-base font-extrabold text-ink">Kontak & Jalur WhatsApp</h3>
-                    <p class="text-xs text-warm-gray mt-0.5">Semua tombol konsultasi WhatsApp dan floating chat di website publik terhubung langsung ke nomor ini.</p>
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                        <h3 class="text-base font-extrabold text-ink">Kontak & Jalur WhatsApp</h3>
+                        <p class="text-xs text-warm-gray mt-0.5">Kelola nomor WhatsApp CS/narahubung. Bila lebih dari 1 nomor, pop-up selektor otomatis tampil saat pengunjung menekan tombol WhatsApp.</p>
+                    </div>
+                    <button 
+                        type="button" 
+                        onclick="addWaNumberRow()" 
+                        class="self-start sm:self-auto px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300 shadow-sm transition inline-flex items-center gap-1.5 active:scale-95 cursor-pointer"
+                    >
+                        <svg class="size-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                        <span>Tambah Nomor WA</span>
+                    </button>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div>
-                        <label for="whatsapp_number" class="block text-xs font-bold uppercase tracking-wider text-warm-gray mb-1.5">
-                            Nomor WhatsApp Tujuan <span class="text-red-500">*</span>
-                        </label>
-                        <input 
-                            type="text" 
-                            name="whatsapp_number" 
-                            id="whatsapp_number" 
-                            value="{{ old('whatsapp_number', $settings['whatsapp_number'] ?? '081234567890') }}" 
-                            required 
-                            placeholder="081234567890 atau 6281234567890" 
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-loaction-500 focus:ring-2 focus:ring-loaction-200 text-sm font-bold font-mono outline-none transition"
-                            oninput="updateWaPreview()"
-                        >
-                        <p class="mt-1 text-[0.68rem] text-slate-400">Bisa diawali dengan 08... atau 628... (otomatis diformat sistem ke format internasional).</p>
-                    </div>
+                <!-- WhatsApp Numbers Repeater -->
+                <div id="waNumbersContainer" class="space-y-3.5">
+                    @foreach($waList as $idx => $wa)
+                        <div class="wa-row p-4 rounded-2xl bg-slate-50/80 border border-slate-200/90 relative transition hover:border-emerald-300/80 hover:bg-white" data-index="{{ $idx }}">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-2">
+                                    <span class="wa-index-badge px-2.5 py-0.5 rounded-full text-[0.68rem] font-extrabold {{ $idx === 0 ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-slate-200 text-slate-700' }}">
+                                        {{ $idx === 0 ? 'Nomor Utama (CS 1)' : 'Narahubung ' . ($idx + 1) }}
+                                    </span>
+                                    @if($idx === 0)
+                                        <span class="text-[0.68rem] text-slate-400 font-medium hidden sm:inline">(Prioritas tombol konsultasi cepat)</span>
+                                    @endif
+                                </div>
+                                <button 
+                                    type="button" 
+                                    onclick="removeWaNumberRow(this)" 
+                                    class="wa-remove-btn text-xs font-bold text-rose-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-50 transition cursor-pointer {{ count($waList) <= 1 ? 'hidden' : '' }}" 
+                                    title="Hapus nomor ini"
+                                >
+                                    <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+                                </button>
+                            </div>
 
-                    <div>
-                        <label for="whatsapp_display" class="block text-xs font-bold uppercase tracking-wider text-warm-gray mb-1.5">
-                            Tampilan Teks Nomor WhatsApp
-                        </label>
-                        <input 
-                            type="text" 
-                            name="whatsapp_display" 
-                            id="whatsapp_display" 
-                            value="{{ old('whatsapp_display', $settings['whatsapp_display'] ?? '+62 812-3456-7890') }}" 
-                            placeholder="+62 812-3456-7890" 
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-loaction-500 focus:ring-2 focus:ring-loaction-200 text-sm font-semibold outline-none transition"
-                        >
-                        <p class="mt-1 text-[0.68rem] text-slate-400">Format teks yang tampil di layar kontak untuk dibaca klien.</p>
-                    </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                                <div>
+                                    <label class="block text-[0.7rem] font-bold uppercase tracking-wider text-warm-gray mb-1">
+                                        Label / Layanan <span class="text-red-500">*</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        name="whatsapp_numbers[{{ $idx }}][label]" 
+                                        value="{{ $wa['label'] ?? '' }}" 
+                                        required 
+                                        placeholder="Contoh: CS Konsultasi & Jadwal" 
+                                        class="wa-label-input w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-loaction-500 focus:ring-2 focus:ring-loaction-200 text-xs font-bold text-ink outline-none transition"
+                                        oninput="updateWaPreview()"
+                                    >
+                                </div>
+                                <div>
+                                    <label class="block text-[0.7rem] font-bold uppercase tracking-wider text-warm-gray mb-1">
+                                        Nomor WhatsApp <span class="text-red-500">*</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        name="whatsapp_numbers[{{ $idx }}][number]" 
+                                        value="{{ $wa['number'] ?? '' }}" 
+                                        required 
+                                        placeholder="081234567890 atau 6281234567890" 
+                                        class="wa-number-input w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-loaction-500 focus:ring-2 focus:ring-loaction-200 text-xs font-mono font-bold text-ink outline-none transition"
+                                        oninput="updateWaPreview()"
+                                    >
+                                </div>
+                                <div>
+                                    <label class="block text-[0.7rem] font-bold uppercase tracking-wider text-warm-gray mb-1">
+                                        Tampilan Nomor (Teks)
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        name="whatsapp_numbers[{{ $idx }}][display]" 
+                                        value="{{ $wa['display'] ?? '' }}" 
+                                        placeholder="+62 812-3456-7890" 
+                                        class="wa-display-input w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-loaction-500 focus:ring-2 focus:ring-loaction-200 text-xs font-semibold text-slate-700 outline-none transition"
+                                        oninput="updateWaPreview()"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
+
+                <!-- Hidden inputs for backward compatibility -->
+                <input type="hidden" name="whatsapp_number" id="whatsapp_number" value="{{ old('whatsapp_number', $settings['whatsapp_number'] ?? ($waList[0]['number'] ?? '081234567890')) }}">
+                <input type="hidden" name="whatsapp_display" id="whatsapp_display" value="{{ old('whatsapp_display', $settings['whatsapp_display'] ?? ($waList[0]['display'] ?? '+62 812-3456-7890')) }}">
 
                 <div>
                     <label for="whatsapp_default_message" class="block text-xs font-bold uppercase tracking-wider text-warm-gray mb-1.5">
@@ -115,27 +186,23 @@
                 </div>
 
                 <!-- Live WhatsApp Preview Box -->
-                <div class="p-3.5 sm:p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div class="flex items-center gap-3 min-w-0">
-                        <div class="size-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-sm">
-                            <svg class="size-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <div class="p-3.5 sm:p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-3">
+                    <div class="flex items-center gap-2">
+                        <div class="size-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-sm">
+                            <svg class="size-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                         </div>
-                        <div class="min-w-0">
+                        <div>
                             <span class="block text-xs font-bold text-emerald-950 flex items-center gap-1.5">
                                 <span class="size-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                Pratinjau Tautan Chat Langsung
+                                Pratinjau Jalur Chat WhatsApp
                             </span>
-                            <span id="waPreviewUrl" class="text-[0.7rem] font-mono text-emerald-800 break-all truncate block">Memuat tautan...</span>
+                            <span class="text-[0.68rem] text-emerald-800">Cek langsung fungsi klik dan tautan pesan otomatis di bawah.</span>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto shrink-0">
-                        <button type="button" onclick="copyWaLink()" id="copyWaBtn" class="justify-center px-3.5 py-2.5 rounded-xl bg-white hover:bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300 shadow-sm transition inline-flex items-center gap-1.5">
-                            <svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"/></svg>
-                            <span id="copyWaText">Salin Tautan</span>
-                        </button>
-                        <a id="waPreviewBtn" href="#" target="_blank" rel="noopener" class="justify-center px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-sm transition inline-flex items-center gap-1.5">
-                            <span>Buka Chat &rarr;</span>
-                        </a>
+
+                    <!-- Dynamic preview list of cards -->
+                    <div id="waPreviewCardsContainer" class="space-y-2">
+                        <!-- Populated by JS -->
                     </div>
                 </div>
 
@@ -464,42 +531,200 @@
             }
         }
 
-        function updateWaPreview() {
-            const numInput = document.getElementById('whatsapp_number');
-            const msgInput = document.getElementById('whatsapp_default_message');
-            const previewUrl = document.getElementById('waPreviewUrl');
-            const previewBtn = document.getElementById('waPreviewBtn');
+        function reindexWaRows() {
+            const container = document.getElementById('waNumbersContainer');
+            if (!container) return;
+            const rows = container.querySelectorAll('.wa-row');
 
-            if (!numInput || !previewUrl || !previewBtn) return;
+            rows.forEach((row, idx) => {
+                row.setAttribute('data-index', idx);
 
-            let clean = (numInput.value || '').replace(/[^0-9]/g, '');
-            if (clean.startsWith('0')) {
-                clean = '62' + clean.substring(1);
+                // Badge
+                const badge = row.querySelector('.wa-index-badge');
+                if (badge) {
+                    if (idx === 0) {
+                        badge.className = 'wa-index-badge px-2.5 py-0.5 rounded-full text-[0.68rem] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300';
+                        badge.textContent = 'Nomor Utama (CS 1)';
+                    } else {
+                        badge.className = 'wa-index-badge px-2.5 py-0.5 rounded-full text-[0.68rem] font-extrabold bg-slate-200 text-slate-700';
+                        badge.textContent = 'Narahubung ' + (idx + 1);
+                    }
+                }
+
+                // Inputs
+                const labelInput = row.querySelector('.wa-label-input');
+                if (labelInput) labelInput.name = `whatsapp_numbers[${idx}][label]`;
+
+                const numInput = row.querySelector('.wa-number-input');
+                if (numInput) numInput.name = `whatsapp_numbers[${idx}][number]`;
+
+                const displayInput = row.querySelector('.wa-display-input');
+                if (displayInput) displayInput.name = `whatsapp_numbers[${idx}][display]`;
+
+                // Remove button visibility
+                const removeBtn = row.querySelector('.wa-remove-btn');
+                if (removeBtn) {
+                    if (rows.length <= 1) {
+                        removeBtn.classList.add('hidden');
+                    } else {
+                        removeBtn.classList.remove('hidden');
+                    }
+                }
+            });
+
+            // Update primary hidden inputs for backward compatibility
+            const firstRow = rows[0];
+            if (firstRow) {
+                const firstNum = firstRow.querySelector('.wa-number-input');
+                const firstDisplay = firstRow.querySelector('.wa-display-input');
+                const hiddenNum = document.getElementById('whatsapp_number');
+                const hiddenDisplay = document.getElementById('whatsapp_display');
+                if (firstNum && hiddenNum) hiddenNum.value = firstNum.value;
+                if (firstDisplay && hiddenDisplay) hiddenDisplay.value = firstDisplay.value;
             }
-            if (!clean) clean = '6281234567890';
 
-            const msg = msgInput ? msgInput.value : '';
-            const fullUrl = 'https://wa.me/' + clean + (msg ? '?text=' + encodeURIComponent(msg) : '');
-
-            previewUrl.textContent = fullUrl;
-            previewBtn.href = fullUrl;
+            updateWaPreview();
         }
 
-        function copyWaLink() {
-            const previewUrl = document.getElementById('waPreviewUrl');
-            const copyText = document.getElementById('copyWaText');
-            if (!previewUrl || !copyText) return;
+        function addWaNumberRow() {
+            const container = document.getElementById('waNumbersContainer');
+            if (!container) return;
+            const rows = container.querySelectorAll('.wa-row');
+            const nextIdx = rows.length;
 
-            navigator.clipboard.writeText(previewUrl.textContent).then(() => {
-                copyText.textContent = 'Tersalin!';
-                setTimeout(() => {
-                    copyText.textContent = 'Salin Tautan';
-                }, 2000);
-            }).catch(() => {
-                copyText.textContent = 'Gagal Salin';
-                setTimeout(() => {
-                    copyText.textContent = 'Salin Tautan';
-                }, 2000);
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'wa-row p-4 rounded-2xl bg-slate-50/80 border border-slate-200/90 relative transition hover:border-emerald-300/80 hover:bg-white';
+            rowDiv.setAttribute('data-index', nextIdx);
+            rowDiv.innerHTML = `
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="wa-index-badge px-2.5 py-0.5 rounded-full text-[0.68rem] font-extrabold bg-slate-200 text-slate-700">
+                            Narahubung ${nextIdx + 1}
+                        </span>
+                    </div>
+                    <button 
+                        type="button" 
+                        onclick="removeWaNumberRow(this)" 
+                        class="wa-remove-btn text-xs font-bold text-rose-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-50 transition cursor-pointer" 
+                        title="Hapus nomor ini"
+                    >
+                        <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                    <div>
+                        <label class="block text-[0.7rem] font-bold uppercase tracking-wider text-warm-gray mb-1">
+                            Label / Layanan <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            name="whatsapp_numbers[${nextIdx}][label]" 
+                            required 
+                            placeholder="Contoh: CS Kemitraan & Uji Kompetensi" 
+                            class="wa-label-input w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-loaction-500 focus:ring-2 focus:ring-loaction-200 text-xs font-bold text-ink outline-none transition"
+                            oninput="updateWaPreview()"
+                        >
+                    </div>
+                    <div>
+                        <label class="block text-[0.7rem] font-bold uppercase tracking-wider text-warm-gray mb-1">
+                            Nomor WhatsApp <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            name="whatsapp_numbers[${nextIdx}][number]" 
+                            required 
+                            placeholder="081234567890 atau 6281234567890" 
+                            class="wa-number-input w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-loaction-500 focus:ring-2 focus:ring-loaction-200 text-xs font-mono font-bold text-ink outline-none transition"
+                            oninput="updateWaPreview()"
+                        >
+                    </div>
+                    <div>
+                        <label class="block text-[0.7rem] font-bold uppercase tracking-wider text-warm-gray mb-1">
+                            Tampilan Nomor (Teks)
+                        </label>
+                        <input 
+                            type="text" 
+                            name="whatsapp_numbers[${nextIdx}][display]" 
+                            placeholder="+62 812-3456-7890" 
+                            class="wa-display-input w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-loaction-500 focus:ring-2 focus:ring-loaction-200 text-xs font-semibold text-slate-700 outline-none transition"
+                            oninput="updateWaPreview()"
+                        >
+                    </div>
+                </div>
+            `;
+            container.appendChild(rowDiv);
+            reindexWaRows();
+        }
+
+        function removeWaNumberRow(btn) {
+            const row = btn.closest('.wa-row');
+            if (!row) return;
+            const container = document.getElementById('waNumbersContainer');
+            if (container && container.querySelectorAll('.wa-row').length > 1) {
+                row.remove();
+                reindexWaRows();
+            }
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function updateWaPreview() {
+            const container = document.getElementById('waNumbersContainer');
+            const previewContainer = document.getElementById('waPreviewCardsContainer');
+            const msgInput = document.getElementById('whatsapp_default_message');
+            if (!container || !previewContainer) return;
+
+            const msg = msgInput ? msgInput.value : '';
+            const rows = container.querySelectorAll('.wa-row');
+            previewContainer.innerHTML = '';
+
+            rows.forEach((row, idx) => {
+                const labelInput = row.querySelector('.wa-label-input');
+                const numInput = row.querySelector('.wa-number-input');
+                const displayInput = row.querySelector('.wa-display-input');
+
+                const label = (labelInput && labelInput.value.trim()) || ('Customer Service ' + (idx + 1));
+                let rawNum = (numInput && numInput.value.trim()) || '';
+                let clean = rawNum.replace(/[^0-9]/g, '');
+                if (clean.startsWith('0')) clean = '62' + clean.substring(1);
+                if (!clean) clean = '6281234567890';
+
+                const display = (displayInput && displayInput.value.trim()) || ('+' + clean);
+                const fullUrl = 'https://wa.me/' + clean + (msg ? '?text=' + encodeURIComponent(msg) : '');
+
+                // Sync first row to hidden input
+                if (idx === 0) {
+                    const hiddenNum = document.getElementById('whatsapp_number');
+                    const hiddenDisplay = document.getElementById('whatsapp_display');
+                    if (hiddenNum) hiddenNum.value = rawNum || clean;
+                    if (hiddenDisplay) hiddenDisplay.value = display;
+                }
+
+                const card = document.createElement('div');
+                card.className = 'flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3 rounded-xl bg-white border border-emerald-200/90 shadow-2xs';
+                card.innerHTML = `
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <span class="size-2 rounded-full ${idx === 0 ? 'bg-emerald-500' : 'bg-slate-400'} shrink-0"></span>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-extrabold text-ink truncate">${escapeHtml(label)}</span>
+                                ${idx === 0 ? '<span class="text-[0.62rem] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">Utama</span>' : ''}
+                            </div>
+                            <span class="text-[0.68rem] font-mono text-emerald-800 block truncate">${fullUrl}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0 self-end sm:self-auto">
+                        <button type="button" onclick="navigator.clipboard.writeText('${fullUrl}').then(() => { this.innerText = 'Tersalin!'; setTimeout(() => this.innerText = 'Salin', 1500); })" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[0.68rem] font-bold transition cursor-pointer">
+                            Salin
+                        </button>
+                        <a href="${fullUrl}" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[0.68rem] font-extrabold transition inline-flex items-center gap-1">
+                            <span>Chat</span> &rarr;
+                        </a>
+                    </div>
+                `;
+                previewContainer.appendChild(card);
             });
         }
 

@@ -74,9 +74,9 @@ class Setting extends Model
     /**
      * Helper to generate dynamic WhatsApp click-to-chat URL.
      */
-    public static function whatsappUrl(?string $customText = null): string
+    public static function whatsappUrl(?string $customText = null, ?string $number = null): string
     {
-        $rawNumber = static::get('whatsapp_number', '6281234567890');
+        $rawNumber = $number ?: static::get('whatsapp_number', '081234567890');
         $cleanNumber = preg_replace('/[^0-9]/', '', (string) $rawNumber);
 
         if (str_starts_with($cleanNumber, '0')) {
@@ -91,6 +91,73 @@ class Setting extends Model
         $message = $customText ?: $defaultMessage;
 
         return 'https://wa.me/' . $cleanNumber . '?text=' . rawurlencode($message);
+    }
+
+    /**
+     * Get all active WhatsApp numbers as an array of structured items.
+     *
+     * @return array<int, array{number: string, clean_number: string, display: string, label: string, url: string, is_primary: bool}>
+     */
+    public static function whatsappNumbers(?string $customText = null): array
+    {
+        $defaultMessage = static::get(
+            'whatsapp_default_message',
+            'Halo LoAction, saya ingin konsultasi layanan psikologi.'
+        );
+        $message = $customText ?: $defaultMessage;
+
+        $json = static::get('whatsapp_numbers');
+        $items = [];
+
+        if ($json) {
+            $decoded = is_string($json) ? json_decode($json, true) : $json;
+            if (is_array($decoded) && !empty($decoded)) {
+                foreach ($decoded as $index => $item) {
+                    $rawNumber = trim((string) ($item['number'] ?? ''));
+                    if (empty($rawNumber)) {
+                        continue;
+                    }
+
+                    $cleanNumber = preg_replace('/[^0-9]/', '', $rawNumber);
+                    if (str_starts_with($cleanNumber, '0')) {
+                        $cleanNumber = '62' . substr($cleanNumber, 1);
+                    }
+
+                    $label = !empty($item['label']) ? trim($item['label']) : 'Customer Service ' . ($index + 1);
+                    $display = !empty($item['display']) ? trim($item['display']) : ('+' . $cleanNumber);
+
+                    $items[] = [
+                        'number'       => $rawNumber,
+                        'clean_number' => $cleanNumber,
+                        'display'      => $display,
+                        'label'        => $label,
+                        'url'          => 'https://wa.me/' . $cleanNumber . '?text=' . rawurlencode($message),
+                        'is_primary'   => $index === 0,
+                    ];
+                }
+            }
+        }
+
+        // Fallback to legacy single number if whatsapp_numbers is empty
+        if (empty($items)) {
+            $rawNumber = static::get('whatsapp_number', '081234567890');
+            $cleanNumber = preg_replace('/[^0-9]/', '', (string) $rawNumber);
+            if (str_starts_with($cleanNumber, '0')) {
+                $cleanNumber = '62' . substr($cleanNumber, 1);
+            }
+            $display = static::get('whatsapp_display', '+62 812-3456-7890');
+
+            $items[] = [
+                'number'       => (string) $rawNumber,
+                'clean_number' => $cleanNumber,
+                'display'      => $display,
+                'label'        => 'Customer Service',
+                'url'          => 'https://wa.me/' . $cleanNumber . '?text=' . rawurlencode($message),
+                'is_primary'   => true,
+            ];
+        }
+
+        return $items;
     }
 
     /**
