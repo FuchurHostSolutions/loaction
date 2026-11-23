@@ -66,10 +66,19 @@
                 <p class="text-xs text-slate-500 mt-1">Coba sesuaikan kata kunci pencarian atau filter status Anda.</p>
             </div>
         @else
+            {{-- Mobile swipe hint --}}
+            <div class="sm:hidden px-4 py-2 bg-slate-50 border-b border-slate-200/70 text-[0.68rem] text-slate-500 font-semibold flex items-center justify-between">
+                <span class="flex items-center gap-1.5">
+                    <svg class="size-3.5 text-loaction-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
+                    Geser tabel untuk melihat rincian & aksi
+                </span>
+                <span class="text-[0.65rem] text-slate-400 font-mono">swipe &rarr;</span>
+            </div>
+
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
+                <table class="w-full text-left text-xs min-w-[760px]">
                     <thead>
-                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-extrabold text-[0.68rem]">
+                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-extrabold text-[0.68rem] whitespace-nowrap">
                             <th class="py-3.5 px-5">ID & Waktu</th>
                             <th class="py-3.5 px-5">Klien</th>
                             <th class="py-3.5 px-5">Layanan</th>
@@ -81,7 +90,7 @@
                     <tbody class="divide-y divide-slate-100">
                         @foreach($consultations as $c)
                             <tr class="transition {{ $c->status === 'pending' ? 'bg-amber-50/40 hover:bg-amber-50' : 'hover:bg-slate-50/70' }}">
-                                <td class="py-4 px-5 text-slate-400 font-mono text-[0.7rem]">
+                                <td class="py-4 px-5 text-slate-400 font-mono text-[0.7rem] whitespace-nowrap">
                                     #{{ $c->id }}
                                     <span class="block text-[0.65rem] text-slate-500">{{ $c->created_at->format('d/m/Y H:i') }}</span>
                                 </td>
@@ -96,23 +105,23 @@
                                         <span class="font-mono text-[0.7rem]">{{ $c->phone }}</span>
                                         @if($c->email)
                                             <span class="text-slate-300">•</span>
-                                            <span class="text-[0.7rem]">{{ $c->email }}</span>
+                                            <span class="text-[0.7rem] truncate max-w-[140px]">{{ $c->email }}</span>
                                         @endif
                                     </div>
                                     @if($c->notes)
-                                        <p class="text-[0.68rem] text-slate-400 mt-1 line-clamp-1 italic">"{{ $c->notes }}"</p>
+                                        <p class="text-[0.68rem] text-slate-400 mt-1 line-clamp-1 italic max-w-xs">"{{ $c->notes }}"</p>
                                     @endif
                                 </td>
                                 <td class="py-4 px-5 font-semibold text-warm-gray">
                                     {{ $c->service?->title ?? '-' }}
                                 </td>
-                                <td class="py-4 px-5">
+                                <td class="py-4 px-5 whitespace-nowrap">
                                     <span class="inline-block px-2 py-0.5 rounded text-[0.65rem] font-bold uppercase tracking-wider {{ $c->session_type === 'online' ? 'bg-sky-100 text-sky-700' : 'bg-emerald-100 text-emerald-700' }}">
                                         {{ $c->session_type ?? 'TBA' }}
                                     </span>
                                     <span class="block text-[0.65rem] text-slate-500 mt-0.5 font-medium">{{ $c->preferred_time ?? '-' }}</span>
                                 </td>
-                                <td class="py-4 px-5">
+                                <td class="py-4 px-5 whitespace-nowrap">
                                     @if($c->status === 'processed')
                                         <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[0.68rem] font-bold bg-emerald-100 text-emerald-800">
                                             <span class="size-1.5 rounded-full bg-emerald-500"></span> Selesai
@@ -127,7 +136,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="py-4 px-5 text-right">
+                                <td class="py-4 px-5 text-right whitespace-nowrap">
                                     <div class="inline-flex items-center gap-1.5">
                                         @php
                                             $cleanPhone = preg_replace('/[^0-9]/', '', $c->phone ?? '');

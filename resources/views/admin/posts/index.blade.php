@@ -86,10 +86,19 @@
                 <a href="{{ route('admin.posts.create') }}" class="inline-block mt-3 text-xs font-bold text-loaction-600 hover:underline">Tulis artikel sekarang &rarr;</a>
             </div>
         @else
+            {{-- Mobile swipe hint --}}
+            <div class="sm:hidden px-4 py-2 bg-slate-50 border-b border-slate-200/70 text-[0.68rem] text-slate-500 font-semibold flex items-center justify-between">
+                <span class="flex items-center gap-1.5">
+                    <svg class="size-3.5 text-loaction-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
+                    Geser tabel untuk melihat status & aksi
+                </span>
+                <span class="text-[0.65rem] text-slate-400 font-mono">swipe &rarr;</span>
+            </div>
+
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
+                <table class="w-full text-left text-xs min-w-[700px]">
                     <thead>
-                        <tr class="border-b border-slate-200 bg-slate-50/70 text-slate-400 uppercase tracking-wider font-bold">
+                        <tr class="border-b border-slate-200 bg-slate-50/70 text-slate-400 uppercase tracking-wider font-bold whitespace-nowrap">
                             <th class="py-3.5 px-4">Artikel</th>
                             <th class="py-3.5 px-4">Kategori</th>
                             <th class="py-3.5 px-4 text-center">Dibaca</th>
@@ -120,18 +129,18 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="py-4 px-4 font-semibold text-slate-600">
+                                <td class="py-4 px-4 font-semibold text-slate-600 whitespace-nowrap">
                                     <span class="inline-block px-2.5 py-1 rounded-full text-[0.65rem] font-bold bg-loaction-50 text-loaction-700 ring-1 ring-loaction-200">
                                         {{ $post->category }}
                                     </span>
                                 </td>
-                                <td class="py-4 px-4 text-center font-mono font-bold text-slate-600">
+                                <td class="py-4 px-4 text-center font-mono font-bold text-slate-600 whitespace-nowrap">
                                     <span class="inline-flex items-center gap-1">
                                         <svg class="size-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178zM15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                         {{ number_format($post->views_count) }}
                                     </span>
                                 </td>
-                                <td class="py-4 px-4">
+                                <td class="py-4 px-4 whitespace-nowrap">
                                     @if($post->is_published)
                                         <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[0.65rem] font-bold bg-emerald-100 text-emerald-800">
                                             <span class="size-1.5 rounded-full bg-emerald-500"></span> Published
@@ -145,7 +154,7 @@
                                         {{ $post->published_at ? $post->published_at->format('d M Y, H:i') : 'Belum dijadwalkan' }}
                                     </span>
                                 </td>
-                                <td class="py-4 px-4 text-right">
+                                <td class="py-4 px-4 text-right whitespace-nowrap">
                                     <div class="inline-flex items-center gap-1.5">
                                         @if($post->is_published)
                                             <a 

@@ -115,8 +115,17 @@
             </div>
 
             <!-- Table Logs -->
+            {{-- Mobile swipe hint --}}
+            <div class="sm:hidden px-4 py-2 bg-slate-50 border-b border-slate-200/70 text-[0.68rem] text-slate-500 font-semibold flex items-center justify-between">
+                <span class="flex items-center gap-1.5">
+                    <svg class="size-3.5 text-loaction-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
+                    Geser tabel untuk melihat rincian aktivitas
+                </span>
+                <span class="text-[0.65rem] text-slate-400 font-mono">swipe &rarr;</span>
+            </div>
+
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full text-left border-collapse min-w-[860px]">
                     <thead>
                         <tr class="border-b border-slate-100 bg-slate-50/70 text-[0.7rem] font-extrabold uppercase tracking-wider text-warm-gray">
                             <th class="py-3.5 px-6">Waktu</th>
@@ -270,8 +279,17 @@
             </div>
 
             <!-- Table Visitor Logs -->
+            {{-- Mobile swipe hint --}}
+            <div class="sm:hidden px-4 py-2 bg-slate-50 border-b border-slate-200/70 text-[0.68rem] text-slate-500 font-semibold flex items-center justify-between">
+                <span class="flex items-center gap-1.5">
+                    <svg class="size-3.5 text-loaction-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
+                    Geser tabel untuk melihat rincian kunjungan
+                </span>
+                <span class="text-[0.65rem] text-slate-400 font-mono">swipe &rarr;</span>
+            </div>
+
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full text-left border-collapse min-w-[780px]">
                     <thead>
                         <tr class="border-b border-slate-100 bg-slate-50/70 text-[0.7rem] font-extrabold uppercase tracking-wider text-warm-gray">
                             <th class="py-3.5 px-6">Waktu</th>
