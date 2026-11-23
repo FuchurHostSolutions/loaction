@@ -27,16 +27,19 @@
    - [Admin Panel & CMS Terpusat](#2-admin-panel--cms-terpusat-admin)
 3. [Arsitektur & Tech Stack](#-arsitektur--tech-stack)
 4. [Struktur Direktori](#-struktur-direktori)
-5. [Panduan Instalasi Lokal](#-panduan-instalasi-lokal)
-6. [Kredensial Default Admin](#-kredensial-default-admin)
-7. [Panduan Penggunaan Fitur CMS](#-panduan-penggunaan-fitur-cms)
+5. [Struktur & Skema Basis Data](#-struktur--skema-basis-data-database-schema)
+   - [Entity Relationship Diagram (ERD)](#entity-relationship-diagram-erd)
+   - [Daftar Tabel & Spesifikasi Kolom](#daftar-tabel--spesifikasi-kolom)
+6. [Panduan Instalasi Lokal](#-panduan-instalasi-lokal)
+7. [Kredensial Default Admin](#-kredensial-default-admin)
+8. [Panduan Penggunaan Fitur CMS](#-panduan-penggunaan-fitur-cms)
    - [Multi-Nomor WhatsApp](#a-pengelolaan-multi-nomor-whatsapp)
    - [Manajemen CRM Konsultasi](#b-crm-permohonan-konsultasi)
    - [Manajemen Artikel & Edukasi](#c-manajemen-artikel--publikasi)
    - [Audit Trail & Log Sistem](#d-audit-trail--system-logs)
-8. [Panduan Deployment ke Server Produksi](#-panduan-deployment-ke-server-produksi)
-9. [Keamanan & Optimasi Kinerja](#-keamanan--optimasi-kinerja)
-10. [Lisensi & Legalitas](#-lisensi--legalitas)
+9. [Panduan Deployment ke Server Produksi](#-panduan-deployment-ke-server-produksi)
+10. [Keamanan & Optimasi Kinerja](#-keamanan--optimasi-kinerja)
+11. [Lisensi & Legalitas](#-lisensi--legalitas)
 
 ---
 
@@ -196,6 +199,263 @@ loaction_laravel/
 │   └── console.php                   # Perintah Artisan Terjadwal
 └── storage/                          # Cache, Sessions, Upload Files, Logs
 ```
+
+---
+
+## 🗄 Struktur & Skema Basis Data (Database Schema)
+
+Aplikasi ini menggunakan basis data relasional **MySQL 8.0+** yang dirancang dengan integritas data, pengindeksan optimal untuk pencarian, dan relasi *Foreign Key* dengan aturan *Cascade / Set Null on Delete*.
+
+### Entity Relationship Diagram (ERD)
+
+```mermaid
+erDiagram
+    USERS ||--o{ ACTIVITY_LOGS : "mencatat aktivitas"
+    SERVICES ||--o{ SERVICE_ITEMS : "memiliki butir kegiatan"
+    SERVICES ||--o{ CONSULTATIONS : "dipilih pada formulir"
+
+    USERS {
+        bigint id PK
+        string name
+        string email UK
+        timestamp email_verified_at
+        string password
+        string remember_token
+        timestamps created_at_updated_at
+    }
+
+    SERVICES {
+        bigint id PK
+        string icon
+        string title
+        string slug UK
+        text description
+        string cta
+        smallint sort_order
+        boolean is_active
+        timestamps created_at_updated_at
+    }
+
+    SERVICE_ITEMS {
+        bigint id PK
+        bigint service_id FK
+        string name
+        smallint sort_order
+        timestamps created_at_updated_at
+    }
+
+    CONSULTATIONS {
+        bigint id PK
+        string name
+        string email
+        string phone
+        bigint service_id FK
+        string service_name
+        text message
+        enum status "pending, processed, cancelled"
+        timestamps created_at_updated_at
+    }
+
+    POSTS {
+        bigint id PK
+        string title
+        string slug UK
+        string category
+        text excerpt
+        longtext content
+        string cover_image
+        string author_name
+        smallint reading_time
+        boolean is_published
+        timestamp published_at
+        unsigned_int views_count
+        timestamps created_at_updated_at
+    }
+
+    SETTINGS {
+        bigint id PK
+        string key UK "indexed"
+        longtext value
+        string group "indexed"
+        string type
+        timestamps created_at_updated_at
+    }
+
+    ACTIVITY_LOGS {
+        bigint id PK
+        bigint user_id FK
+        string user_name
+        string action
+        string action_type "indexed"
+        text description
+        string subject_type
+        bigint subject_id
+        json properties
+        string ip_address
+        text user_agent
+        timestamps created_at_updated_at
+    }
+
+    SITE_VISITS {
+        bigint id PK
+        string ip_address
+        string url "indexed"
+        string method
+        text referer
+        text user_agent
+        string device
+        date visited_date "indexed"
+        timestamps created_at_updated_at
+    }
+
+    TESTIMONIALS {
+        bigint id PK
+        text quote
+        string name
+        string role
+        tinyint rating
+        smallint sort_order
+        boolean is_active
+        timestamps created_at_updated_at
+    }
+
+    AUDIENCES {
+        bigint id PK
+        string number
+        string title
+        text text
+        smallint sort_order
+        boolean is_active
+        timestamps created_at_updated_at
+    }
+
+    COMPETENCIES {
+        bigint id PK
+        string role
+        text text
+        string icon
+        smallint sort_order
+        boolean is_active
+        timestamps created_at_updated_at
+    }
+```
+
+### Daftar Tabel & Spesifikasi Kolom
+
+#### 1. Tabel `users` (Pengguna & Administrator)
+Menyimpan akun administrator yang berhak mengakses sistem CMS dan pengelolaan permohonan konsultasi.
+| Kolom | Tipe Data | Atribut / Keterangan |
+| :--- | :--- | :--- |
+| `id` | `BIGINT UNSIGNED` | Primary Key, Auto Increment |
+| `name` | `VARCHAR(255)` | Nama lengkap admin / staf |
+| `email` | `VARCHAR(255)` | Unique Key, alamat email login |
+| `email_verified_at` | `TIMESTAMP` | Nullable, waktu verifikasi akun |
+| `password` | `VARCHAR(255)` | Hash Bcrypt kata sandi akun |
+| `remember_token` | `VARCHAR(100)` | Nullable, token sesi *Remember Me* |
+| `created_at` / `updated_at` | `TIMESTAMP` | Waktu pembuatan & modifikasi akun |
+
+#### 2. Tabel `services` (Pilar Layanan Utama)
+Menyimpan data induk 4 pilar layanan utama psikologi biro LoAction.
+| Kolom | Tipe Data | Atribut / Keterangan |
+| :--- | :--- | :--- |
+| `id` | `BIGINT UNSIGNED` | Primary Key, Auto Increment |
+| `icon` | `VARCHAR(10)` | Emoji atau icon pilar layanan |
+| `title` | `VARCHAR(255)` | Judul layanan (*Personal Care*, *Pendidikan*, *Industri*, *Uji Kompetensi*) |
+| `slug` | `VARCHAR(255)` | Unique Key, slug URL identifikasi |
+| `description` | `TEXT` | Penjelasan ringkas cakupan layanan |
+| `cta` | `VARCHAR(255)` | Label tombol aksi panggilan konsultasi |
+| `sort_order` | `SMALLINT UNSIGNED` | Default: `0`, urutan prioritas tampil di frontend |
+| `is_active` | `BOOLEAN` | Default: `true`, status aktif / nonaktif |
+| `created_at` / `updated_at` | `TIMESTAMP` | Waktu pembuatan & pembaruan |
+
+#### 3. Tabel `service_items` (Butir Sub-Layanan)
+Menyimpan butir-butir kegiatan spesifik dari setiap pilar layanan (`1-to-Many` dengan tabel `services`).
+| Kolom | Tipe Data | Atribut / Keterangan |
+| :--- | :--- | :--- |
+| `id` | `BIGINT UNSIGNED` | Primary Key, Auto Increment |
+| `service_id` | `BIGINT UNSIGNED` | Foreign Key ke `services.id` (`ON DELETE CASCADE`) |
+| `name` | `VARCHAR(255)` | Nama kegiatan (misal: *Konseling Individual*, *Psikotes Bakat Minat*) |
+| `sort_order` | `SMALLINT UNSIGNED` | Default: `0`, urutan tampil |
+| `created_at` / `updated_at` | `TIMESTAMP` | Waktu pembuatan & pembaruan |
+
+#### 4. Tabel `consultations` (Leads CRM Permohonan Konsultasi)
+Menampung permohonan konsultasi yang dikirimkan klien melalui website publik.
+| Kolom | Tipe Data | Atribut / Keterangan |
+| :--- | :--- | :--- |
+| `id` | `BIGINT UNSIGNED` | Primary Key, Auto Increment |
+| `name` | `VARCHAR(255)` | Nama lengkap calon klien |
+| `email` | `VARCHAR(255)` | Nullable, email aktif calon klien |
+| `phone` | `VARCHAR(255)` | Nomor WhatsApp/telepon calon klien |
+| `service_id` | `BIGINT UNSIGNED` | Nullable, Foreign Key ke `services.id` (`ON DELETE SET NULL`) |
+| `service_name` | `VARCHAR(255)` | Snapshot nama layanan yang dipilih saat pendaftaran |
+| `message` | `TEXT` | Nullable, uraian kendala atau permohonan jadwal |
+| `status` | `ENUM` | Nilai: `pending` (Baru), `processed` (Diproses), `cancelled` (Dibatalkan) |
+| `created_at` / `updated_at` | `TIMESTAMP` | Waktu permohonan masuk & pembaruan status |
+
+#### 5. Tabel `posts` (Artikel & Publikasi Edukasi)
+Menyimpan artikel edukasi kesehatan mental, tips karir, dan rilis berita seputar psikologi.
+| Kolom | Tipe Data | Atribut / Keterangan |
+| :--- | :--- | :--- |
+| `id` | `BIGINT UNSIGNED` | Primary Key, Auto Increment |
+| `title` | `VARCHAR(255)` | Judul artikel |
+| `slug` | `VARCHAR(255)` | Unique Key, URL slug SEO-friendly |
+| `category` | `VARCHAR(255)` | Index, kategori (*Pendidikan, Industri, Personal Care, Uji Kompetensi*) |
+| `excerpt` | `TEXT` | Nullable, ringkasan pendek artikel |
+| `content` | `LONGTEXT` | Isi lengkap artikel (mendukung format HTML/rich text) |
+| `cover_image` | `VARCHAR(255)` | Nullable, path lokasi file gambar cover di storage |
+| `author_name` | `VARCHAR(255)` | Default: `'Tim Psikolog LoAction'`, nama penulis artikel |
+| `reading_time` | `SMALLINT UNSIGNED` | Default: `3`, estimasi menit waktu baca |
+| `is_published` | `BOOLEAN` | Default: `true`, status terbit / draf |
+| `published_at` | `TIMESTAMP` | Nullable, waktu tanggal publikasi |
+| `views_count` | `INT UNSIGNED` | Default: `0`, penghitung akumulasi pembaca |
+| `created_at` / `updated_at` | `TIMESTAMP` | Waktu pembuatan & pembaruan artikel |
+
+#### 6. Tabel `settings` (Konfigurasi Dinamis CMS & Multi-WhatsApp)
+Menyimpan seluruh konfigurasi dinamis website secara terpusat dalam skema *Key-Value Store*.
+| Kolom | Tipe Data | Atribut / Keterangan |
+| :--- | :--- | :--- |
+| `id` | `BIGINT UNSIGNED` | Primary Key, Auto Increment |
+| `key` | `VARCHAR(255)` | Unique Key, index identifikasi pengaturan (misal: `whatsapp_numbers`, `site_name`) |
+| `value` | `LONGTEXT` | Nullable, nilai konfigurasi teks biasa atau JSON terenkapsulasi |
+| `group` | `VARCHAR(255)` | Index grouping (`contact`, `location`, `general`, `seo`) |
+| `type` | `VARCHAR(255)` | Default: `'text'`, format tipe data (`text`, `json`, `textarea`) |
+| `created_at` / `updated_at` | `TIMESTAMP` | Waktu pembuatan & pembaruan konfigurasi |
+
+#### 7. Tabel `activity_logs` (Audit Trail Aktivitas Admin)
+Mencatat seluruh rekam jejak aksi yang dilakukan oleh administrator demi transparansi & keamanan sistem.
+| Kolom | Tipe Data | Atribut / Keterangan |
+| :--- | :--- | :--- |
+| `id` | `BIGINT UNSIGNED` | Primary Key, Auto Increment |
+| `user_id` | `BIGINT UNSIGNED` | Nullable, Foreign Key ke `users.id` (`ON DELETE SET NULL`) |
+| `user_name` | `VARCHAR(120)` | Nullable, nama admin pelaku aksi |
+| `action` | `VARCHAR(80)` | Kode aksi (misal: `post.create`, `setting.update`, `auth.login`) |
+| `action_type` | `VARCHAR(40)` | Kategori aksi (`auth`, `consultation`, `master_data`, `system`) |
+| `description` | `TEXT` | Uraian naratif aktivitas yang dilakukan |
+| `subject_type` | `VARCHAR(120)` | Nullable, nama class model terkait |
+| `subject_id` | `BIGINT UNSIGNED` | Nullable, ID record data terkait |
+| `properties` | `JSON` | Nullable, payload data sebelum dan sesudah perubahan |
+| `ip_address` | `VARCHAR(45)` | Nullable, alamat IP pelaku |
+| `user_agent` | `TEXT` | Nullable, informasi browser & perangkat pelaku |
+| `created_at` / `updated_at` | `TIMESTAMP` | Waktu pencatatan log |
+
+#### 8. Tabel `site_visits` (Perekam Trafik Pengunjung Publik)
+Mencatat analitik pengunjung publik secara real-time untuk visualisasi dashboard admin.
+| Kolom | Tipe Data | Atribut / Keterangan |
+| :--- | :--- | :--- |
+| `id` | `BIGINT UNSIGNED` | Primary Key, Auto Increment |
+| `ip_address` | `VARCHAR(45)` | Alamat IP pengunjung |
+| `url` | `VARCHAR(255)` | URL halaman yang diakses |
+| `method` | `VARCHAR(10)` | HTTP method (`GET`, `POST`) |
+| `referer` | `TEXT` | Nullable, tautan rujukan asal pengunjung |
+| `user_agent` | `TEXT` | Nullable, informasi browser & OS pengunjung |
+| `device` | `VARCHAR(20)` | Klasifikasi perangkat (`desktop`, `mobile`, `tablet`, `bot`) |
+| `visited_date` | `DATE` | Index, tanggal kunjungan untuk agregasi harian |
+| `created_at` / `updated_at` | `TIMESTAMP` | Timestamp kunjungan |
+
+#### 9. Tabel Master Pendukung Lainnya
+- **`testimonials`:** Menyimpan testimoni kepuasan klien (`id`, `quote`, `name`, `role`, `rating`, `sort_order`, `is_active`).
+- **`audiences`:** Sasaran audiens layanan biro (`id`, `number`, `title`, `text`, `sort_order`, `is_active`).
+- **`competencies`:** Skema unit uji sertifikasi profesi BNSP (`id`, `role`, `text`, `icon`, `sort_order`, `is_active`).
 
 ---
 
