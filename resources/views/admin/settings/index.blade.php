@@ -11,51 +11,55 @@
             @method('PUT')
             <input type="hidden" name="active_tab" id="active_tab_input" value="tab-contact">
 
-            <!-- Segmented Pill Tab Bar -->
-            <div class="p-1.5 bg-slate-100 rounded-2xl inline-flex items-center gap-1.5 border border-slate-200/80 overflow-x-auto max-w-full mb-2">
+            <!-- Segmented Pill Tab Bar (Responsive: 2x2 Grid on Mobile, Inline Pills on Desktop) -->
+            <div class="grid grid-cols-2 sm:flex sm:items-center sm:inline-flex gap-1.5 p-1.5 bg-slate-100 rounded-2xl border border-slate-200/80 w-full sm:w-auto mb-3">
                 <button 
                     type="button" 
                     onclick="switchTab('tab-contact')" 
                     id="btn-tab-contact" 
-                    class="tab-btn inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold whitespace-nowrap transition bg-loaction-500 text-white shadow-sm shrink-0"
+                    class="tab-btn flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-xs font-extrabold transition bg-loaction-500 text-white shadow-sm shrink-0"
                 >
                     <svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
-                    <span>Kontak & WhatsApp</span>
+                    <span class="sm:hidden">Kontak & WA</span>
+                    <span class="hidden sm:inline">Kontak & WhatsApp</span>
                 </button>
 
                 <button 
                     type="button" 
                     onclick="switchTab('tab-location')" 
                     id="btn-tab-location" 
-                    class="tab-btn inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-ink hover:bg-white/80 whitespace-nowrap transition shrink-0"
+                    class="tab-btn flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-ink hover:bg-white/80 transition shrink-0"
                 >
                     <svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
-                    <span>Lokasi & Sosial Media</span>
+                    <span class="sm:hidden">Lokasi & Sosmed</span>
+                    <span class="hidden sm:inline">Lokasi & Sosial Media</span>
                 </button>
 
                 <button 
                     type="button" 
                     onclick="switchTab('tab-identity')" 
                     id="btn-tab-identity" 
-                    class="tab-btn inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-ink hover:bg-white/80 whitespace-nowrap transition shrink-0"
+                    class="tab-btn flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-ink hover:bg-white/80 transition shrink-0"
                 >
                     <svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/></svg>
-                    <span>Branding & Beranda</span>
+                    <span class="sm:hidden">Branding & Web</span>
+                    <span class="hidden sm:inline">Branding & Beranda</span>
                 </button>
 
                 <button 
                     type="button" 
                     onclick="switchTab('tab-seo')" 
                     id="btn-tab-seo" 
-                    class="tab-btn inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-ink hover:bg-white/80 whitespace-nowrap transition shrink-0"
+                    class="tab-btn flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-ink hover:bg-white/80 transition shrink-0"
                 >
                     <svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-.778.099-1.533.284-2.253"/></svg>
-                    <span>SEO & Webmaster</span>
+                    <span class="sm:hidden">SEO & Analitik</span>
+                    <span class="hidden sm:inline">SEO & Webmaster</span>
                 </button>
             </div>
 
             <!-- TAB 1: KONTAK & WHATSAPP -->
-            <div id="tab-contact" class="tab-content bg-white rounded-3xl p-6 sm:p-8 shadow-sm ring-1 ring-slate-200/80 space-y-6">
+            <div id="tab-contact" class="tab-content bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm ring-1 ring-slate-200/80 space-y-6">
                 <div>
                     <h3 class="text-base font-extrabold text-ink">Kontak & Jalur WhatsApp</h3>
                     <p class="text-xs text-warm-gray mt-0.5">Semua tombol konsultasi WhatsApp dan floating chat di website publik terhubung langsung ke nomor ini.</p>
@@ -111,7 +115,7 @@
                 </div>
 
                 <!-- Live WhatsApp Preview Box -->
-                <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="p-3.5 sm:p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
                         <div class="size-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-sm">
                             <svg class="size-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -124,12 +128,12 @@
                             <span id="waPreviewUrl" class="text-[0.7rem] font-mono text-emerald-800 break-all truncate block">Memuat tautan...</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 self-start sm:self-auto shrink-0">
-                        <button type="button" onclick="copyWaLink()" id="copyWaBtn" class="px-3.5 py-2 rounded-xl bg-white hover:bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300 shadow-sm transition inline-flex items-center gap-1.5">
+                    <div class="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto shrink-0">
+                        <button type="button" onclick="copyWaLink()" id="copyWaBtn" class="justify-center px-3.5 py-2.5 rounded-xl bg-white hover:bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300 shadow-sm transition inline-flex items-center gap-1.5">
                             <svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"/></svg>
                             <span id="copyWaText">Salin Tautan</span>
                         </button>
-                        <a id="waPreviewBtn" href="#" target="_blank" rel="noopener" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-sm transition inline-flex items-center gap-1.5">
+                        <a id="waPreviewBtn" href="#" target="_blank" rel="noopener" class="justify-center px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-sm transition inline-flex items-center gap-1.5">
                             <span>Buka Chat &rarr;</span>
                         </a>
                     </div>
@@ -168,7 +172,7 @@
             </div>
 
             <!-- TAB 2: LOKASI & SOSIAL MEDIA -->
-            <div id="tab-location" class="tab-content hidden bg-white rounded-3xl p-6 sm:p-8 shadow-sm ring-1 ring-slate-200/80 space-y-6">
+            <div id="tab-location" class="tab-content hidden bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm ring-1 ring-slate-200/80 space-y-6">
                 <div>
                     <h3 class="text-base font-extrabold text-ink">Lokasi Kantor & Media Sosial</h3>
                     <p class="text-xs text-warm-gray mt-0.5">Informasi operasional yang tampil pada halaman kontak, profil biro, dan footer situs.</p>
@@ -249,7 +253,7 @@
             </div>
 
             <!-- TAB 3: BRANDING & BERANDA -->
-            <div id="tab-identity" class="tab-content hidden bg-white rounded-3xl p-6 sm:p-8 shadow-sm ring-1 ring-slate-200/80 space-y-6">
+            <div id="tab-identity" class="tab-content hidden bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm ring-1 ring-slate-200/80 space-y-6">
                 <div>
                     <h3 class="text-base font-extrabold text-ink">Identitas & Teks Beranda</h3>
                     <p class="text-xs text-warm-gray mt-0.5">Sesuaikan nama brand, slogan, dan copy narasi utama di halaman depan.</p>
@@ -340,7 +344,7 @@
             </div>
 
             <!-- TAB 4: SEO & ANALITIK -->
-            <div id="tab-seo" class="tab-content hidden bg-white rounded-3xl p-6 sm:p-8 shadow-sm ring-1 ring-slate-200/80 space-y-6">
+            <div id="tab-seo" class="tab-content hidden bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm ring-1 ring-slate-200/80 space-y-6">
                 <div>
                     <h3 class="text-base font-extrabold text-ink">Optimasi Mesin Pencari (SEO) & Analitik</h3>
                     <p class="text-xs text-warm-gray mt-0.5">Konfigurasi metadata Google Search dan integrasi pelacakan statistik pengunjung.</p>
@@ -396,12 +400,12 @@
             </div>
 
             <!-- Sticky Bottom Action Bar -->
-            <div class="sticky bottom-4 z-20 backdrop-blur-md bg-white/95 p-4 sm:p-5 rounded-2xl shadow-xl ring-1 ring-slate-200/90 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div class="flex items-center gap-2 text-xs font-semibold text-slate-600 self-start sm:self-auto">
+            <div class="sticky bottom-3 sm:bottom-4 z-20 backdrop-blur-md bg-white/95 p-3.5 sm:p-5 rounded-2xl shadow-xl ring-1 ring-slate-200/90 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex items-center gap-1.5 text-[0.7rem] sm:text-xs font-semibold text-slate-500 self-start sm:self-auto">
                     <svg class="size-4 text-loaction-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
-                    <span>Perubahan akan langsung aktif secara realtime di website publik.</span>
+                    <span>Perubahan langsung aktif di website publik.</span>
                 </div>
-                <button type="submit" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-loaction-500 hover:bg-loaction-600 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-loaction-500/25 transition active:scale-95 inline-flex items-center justify-center gap-2">
+                <button type="submit" class="w-full sm:w-auto px-6 py-3 sm:py-2.5 rounded-xl bg-loaction-500 hover:bg-loaction-600 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-loaction-500/25 transition active:scale-95 inline-flex items-center justify-center gap-2">
                     <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
                     <span>Simpan Pengaturan</span>
                 </button>

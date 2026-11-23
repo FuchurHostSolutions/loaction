@@ -7,56 +7,59 @@
 @section('content')
 <div class="space-y-6">
     <!-- Header Stats -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white rounded-2xl p-4 shadow-sm ring-1 ring-slate-200/80">
-            <span class="text-xs font-bold uppercase tracking-wider text-warm-gray block">Total Log Tercatat</span>
-            <span class="text-2xl font-black text-ink mt-1 block">{{ number_format($stats['total']) }}</span>
-            <span class="text-[0.7rem] text-slate-500 mt-0.5 block">Audit trail keseluruhan</span>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+        <div class="bg-white rounded-2xl p-3.5 sm:p-4 shadow-sm ring-1 ring-slate-200/80">
+            <span class="text-[0.68rem] sm:text-xs font-bold uppercase tracking-wider text-warm-gray block">Total Log</span>
+            <span class="text-xl sm:text-2xl font-black text-ink mt-1 block">{{ number_format($stats['total']) }}</span>
+            <span class="text-[0.65rem] sm:text-[0.7rem] text-slate-400 mt-0.5 block truncate">Audit trail keseluruhan</span>
         </div>
-        <div class="bg-white rounded-2xl p-4 shadow-sm ring-1 ring-slate-200/80">
-            <span class="text-xs font-bold uppercase tracking-wider text-warm-gray block">Aktivitas Hari Ini</span>
-            <span class="text-2xl font-black text-loaction-600 mt-1 block">{{ number_format($stats['today']) }}</span>
-            <span class="text-[0.7rem] text-slate-500 mt-0.5 block">Peristiwa 24 jam terakhir</span>
+        <div class="bg-white rounded-2xl p-3.5 sm:p-4 shadow-sm ring-1 ring-slate-200/80">
+            <span class="text-[0.68rem] sm:text-xs font-bold uppercase tracking-wider text-warm-gray block">Hari Ini</span>
+            <span class="text-xl sm:text-2xl font-black text-loaction-600 mt-1 block">{{ number_format($stats['today']) }}</span>
+            <span class="text-[0.65rem] sm:text-[0.7rem] text-slate-400 mt-0.5 block truncate">Peristiwa 24 jam</span>
         </div>
-        <div class="bg-white rounded-2xl p-4 shadow-sm ring-1 ring-slate-200/80">
-            <span class="text-xs font-bold uppercase tracking-wider text-warm-gray block">Log Autentikasi</span>
-            <span class="text-2xl font-black text-blue-600 mt-1 block">{{ number_format($stats['auth']) }}</span>
-            <span class="text-[0.7rem] text-slate-500 mt-0.5 block">Login, logout, percobaan masuk</span>
+        <div class="bg-white rounded-2xl p-3.5 sm:p-4 shadow-sm ring-1 ring-slate-200/80">
+            <span class="text-[0.68rem] sm:text-xs font-bold uppercase tracking-wider text-warm-gray block">Autentikasi</span>
+            <span class="text-xl sm:text-2xl font-black text-blue-600 mt-1 block">{{ number_format($stats['auth']) }}</span>
+            <span class="text-[0.65rem] sm:text-[0.7rem] text-slate-400 mt-0.5 block truncate">Login & logout sistem</span>
         </div>
-        <div class="bg-white rounded-2xl p-4 shadow-sm ring-1 ring-slate-200/80">
-            <span class="text-xs font-bold uppercase tracking-wider text-warm-gray block">Log Konsultasi</span>
-            <span class="text-2xl font-black text-emerald-600 mt-1 block">{{ number_format($stats['consultations']) }}</span>
-            <span class="text-[0.7rem] text-slate-500 mt-0.5 block">Intake baru & perubahan status</span>
+        <div class="bg-white rounded-2xl p-3.5 sm:p-4 shadow-sm ring-1 ring-slate-200/80">
+            <span class="text-[0.68rem] sm:text-xs font-bold uppercase tracking-wider text-warm-gray block">Konsultasi</span>
+            <span class="text-xl sm:text-2xl font-black text-emerald-600 mt-1 block">{{ number_format($stats['consultations']) }}</span>
+            <span class="text-[0.65rem] sm:text-[0.7rem] text-slate-400 mt-0.5 block truncate">Formulir & status</span>
         </div>
     </div>
 
     <!-- Main Container Card -->
     <div class="bg-white rounded-3xl shadow-sm ring-1 ring-slate-200/80 overflow-hidden">
         <!-- Navigation Tabs -->
-        <div class="flex flex-wrap items-center justify-between border-b border-slate-200 px-6 pt-4 gap-4 bg-slate-50/50">
-            <div class="flex items-center gap-2">
+        <div class="border-b border-slate-200 px-3.5 sm:px-6 pt-3 sm:pt-4 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar -mx-3.5 px-3.5 sm:mx-0 sm:px-0 pb-1 sm:pb-0">
                 <a href="{{ route('admin.logs.index', ['tab' => 'activity']) }}" 
-                   class="px-4 py-3 border-b-2 font-bold text-xs uppercase tracking-wider transition flex items-center gap-2 {{ $tab === 'activity' ? 'border-loaction-500 text-loaction-600 bg-white rounded-t-xl shadow-sm' : 'border-transparent text-warm-gray hover:text-ink' }}">
-                    <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span>Audit Trail Aktivitas</span>
-                    <span class="px-2 py-0.5 rounded-full text-[0.65rem] {{ $tab === 'activity' ? 'bg-loaction-100 text-loaction-700' : 'bg-slate-200 text-slate-600' }}">{{ $activityLogs->total() }}</span>
+                   class="px-3 sm:px-4 py-2.5 sm:py-3 border-b-2 font-bold text-xs uppercase tracking-wider transition flex items-center gap-1.5 sm:gap-2 shrink-0 whitespace-nowrap {{ $tab === 'activity' ? 'border-loaction-500 text-loaction-600 bg-white rounded-t-xl shadow-sm' : 'border-transparent text-warm-gray hover:text-ink' }}">
+                    <svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span class="sm:hidden">Aktivitas</span>
+                    <span class="hidden sm:inline">Audit Trail Aktivitas</span>
+                    <span class="px-1.5 py-0.5 rounded-full text-[0.65rem] {{ $tab === 'activity' ? 'bg-loaction-100 text-loaction-700' : 'bg-slate-200 text-slate-600' }}">{{ $activityLogs->total() }}</span>
                 </a>
                 <a href="{{ route('admin.logs.index', ['tab' => 'system']) }}" 
-                   class="px-4 py-3 border-b-2 font-bold text-xs uppercase tracking-wider transition flex items-center gap-2 {{ $tab === 'system' ? 'border-loaction-500 text-loaction-600 bg-white rounded-t-xl shadow-sm' : 'border-transparent text-warm-gray hover:text-ink' }}">
-                    <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"/></svg>
-                    <span>Log Sistem Laravel (laravel.log)</span>
-                    <span class="px-2 py-0.5 rounded-full text-[0.65rem] {{ $tab === 'system' ? 'bg-loaction-100 text-loaction-700' : 'bg-slate-200 text-slate-600' }}">{{ $logFileSize }} KB</span>
+                   class="px-3 sm:px-4 py-2.5 sm:py-3 border-b-2 font-bold text-xs uppercase tracking-wider transition flex items-center gap-1.5 sm:gap-2 shrink-0 whitespace-nowrap {{ $tab === 'system' ? 'border-loaction-500 text-loaction-600 bg-white rounded-t-xl shadow-sm' : 'border-transparent text-warm-gray hover:text-ink' }}">
+                    <svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"/></svg>
+                    <span class="sm:hidden">Log Sistem</span>
+                    <span class="hidden sm:inline">Log Sistem Laravel</span>
+                    <span class="px-1.5 py-0.5 rounded-full text-[0.65rem] {{ $tab === 'system' ? 'bg-loaction-100 text-loaction-700' : 'bg-slate-200 text-slate-600' }}">{{ $logFileSize }} KB</span>
                 </a>
                 <a href="{{ route('admin.logs.index', ['tab' => 'visitors']) }}" 
-                   class="px-4 py-3 border-b-2 font-bold text-xs uppercase tracking-wider transition flex items-center gap-2 {{ $tab === 'visitors' ? 'border-loaction-500 text-loaction-600 bg-white rounded-t-xl shadow-sm' : 'border-transparent text-warm-gray hover:text-ink' }}">
-                    <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
-                    <span>Log Kunjungan Website</span>
-                    <span class="px-2 py-0.5 rounded-full text-[0.65rem] {{ $tab === 'visitors' ? 'bg-loaction-100 text-loaction-700' : 'bg-slate-200 text-slate-600' }}">{{ $visitorStats['total_views'] }}</span>
+                   class="px-3 sm:px-4 py-2.5 sm:py-3 border-b-2 font-bold text-xs uppercase tracking-wider transition flex items-center gap-1.5 sm:gap-2 shrink-0 whitespace-nowrap {{ $tab === 'visitors' ? 'border-loaction-500 text-loaction-600 bg-white rounded-t-xl shadow-sm' : 'border-transparent text-warm-gray hover:text-ink' }}">
+                    <svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
+                    <span class="sm:hidden">Kunjungan</span>
+                    <span class="hidden sm:inline">Log Kunjungan Website</span>
+                    <span class="px-1.5 py-0.5 rounded-full text-[0.65rem] {{ $tab === 'visitors' ? 'bg-loaction-100 text-loaction-700' : 'bg-slate-200 text-slate-600' }}">{{ $visitorStats['total_views'] }}</span>
                 </a>
             </div>
 
             <!-- Tab Quick Actions -->
-            <div class="pb-3 flex items-center gap-2">
+            <div class="pb-2.5 sm:pb-3 flex items-center justify-end gap-2">
                 @if($tab === 'activity')
                     <button type="button" onclick="document.getElementById('purgeModal').classList.remove('hidden')" class="px-3 py-1.5 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 font-bold text-xs transition flex items-center gap-1.5">
                         <svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
@@ -76,8 +79,8 @@
 
         @if($tab === 'activity')
             <!-- Filter & Search Toolbar -->
-            <div class="p-6 border-b border-slate-100 bg-white">
-                <form method="GET" action="{{ route('admin.logs.index') }}" class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+            <div class="p-3.5 sm:p-6 border-b border-slate-100 bg-white">
+                <form method="GET" action="{{ route('admin.logs.index') }}" class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4">
                     <input type="hidden" name="tab" value="activity">
 
                     <!-- Search Input -->
@@ -93,7 +96,7 @@
                     </div>
 
                     <!-- Category Filter Buttons -->
-                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+                    <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar -mx-3.5 px-3.5 sm:mx-0 sm:px-0 pb-1">
                         @php
                             $currentType = request('type', 'all');
                             $types = [
@@ -106,7 +109,7 @@
                         @endphp
                         @foreach($types as $val => $label)
                             <a href="{{ route('admin.logs.index', array_merge(request()->query(), ['type' => $val])) }}" 
-                               class="px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap {{ $currentType === $val ? 'bg-loaction-500 text-white shadow-sm' : 'bg-slate-100 text-warm-gray hover:bg-slate-200 hover:text-ink' }}">
+                               class="px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap shrink-0 {{ $currentType === $val ? 'bg-loaction-500 text-white shadow-sm' : 'bg-slate-100 text-warm-gray hover:bg-slate-200 hover:text-ink' }}">
                                 {{ $label }}
                             </a>
                         @endforeach
@@ -239,29 +242,31 @@
 
         @elseif($tab === 'system')
             <!-- Tab System Log (laravel.log) -->
-            <div class="p-6">
-                <div class="flex items-center justify-between mb-4">
+            <div class="p-3.5 sm:p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-4">
                     <div class="flex items-center gap-2">
-                        <span class="size-2 rounded-full bg-emerald-500"></span>
-                        <span class="text-xs font-bold text-ink">Catatan Terbaru dari <code class="font-mono text-loaction-600">storage/logs/laravel.log</code></span>
+                        <span class="size-2 rounded-full bg-emerald-500 shrink-0"></span>
+                        <span class="text-xs font-bold text-ink">Catatan Terbaru dari <code class="font-mono text-loaction-600 text-[0.7rem]">storage/logs/laravel.log</code></span>
                     </div>
-                    <span class="text-xs text-warm-gray font-mono">Menampilkan hingga {{ count($systemLogs) }} baris terakhir</span>
+                    <span class="text-[0.7rem] text-warm-gray font-mono">Menampilkan hingga {{ count($systemLogs) }} baris terakhir</span>
                 </div>
 
                 @if(count($systemLogs) > 0)
                     <div class="space-y-2">
                         @foreach($systemLogs as $entry)
-                            <div class="p-3.5 rounded-2xl border border-slate-200/80 bg-slate-50/60 font-mono text-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-2 hover:bg-white hover:shadow-sm transition">
-                                <div class="flex items-center gap-3 min-w-0 flex-1">
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[0.65rem] font-bold tracking-wider shrink-0 {{ $entry['badge'] }}">
-                                        {{ $entry['level'] }}
+                            <div class="p-3 sm:p-3.5 rounded-2xl border border-slate-200/80 bg-slate-50/60 font-mono text-xs flex flex-col gap-2 hover:bg-white hover:shadow-sm transition">
+                                <div class="flex items-center justify-between w-full">
+                                    <div class="flex items-center gap-2 min-w-0">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[0.65rem] font-bold tracking-wider shrink-0 {{ $entry['badge'] }}">
+                                            {{ $entry['level'] }}
+                                        </span>
+                                        <span class="text-slate-400 text-[0.68rem] font-mono shrink-0">{{ $entry['timestamp'] }}</span>
+                                    </div>
+                                    <span class="text-[0.65rem] text-slate-400 uppercase tracking-wider shrink-0 font-sans font-bold">
+                                        Env: {{ $entry['env'] }}
                                     </span>
-                                    <span class="text-slate-400 text-[0.7rem] shrink-0">{{ $entry['timestamp'] }}</span>
-                                    <span class="text-ink font-semibold truncate">{{ $entry['message'] }}</span>
                                 </div>
-                                <span class="text-[0.65rem] text-slate-400 uppercase tracking-wider shrink-0 font-sans font-bold">
-                                    Env: {{ $entry['env'] }}
-                                </span>
+                                <p class="text-ink font-semibold text-xs leading-relaxed break-words font-mono">{{ $entry['message'] }}</p>
                             </div>
                         @endforeach
                     </div>
@@ -278,8 +283,8 @@
 
         @else
             <!-- Tab Visitor Logs (Site Visits) -->
-            <div class="p-6 border-b border-slate-100 bg-white">
-                <form method="GET" action="{{ route('admin.logs.index') }}" class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+            <div class="p-3.5 sm:p-6 border-b border-slate-100 bg-white">
+                <form method="GET" action="{{ route('admin.logs.index') }}" class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4">
                     <input type="hidden" name="tab" value="visitors">
 
                     <!-- Search Input -->
@@ -295,7 +300,7 @@
                     </div>
 
                     <!-- Device Filter Buttons -->
-                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+                    <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar -mx-3.5 px-3.5 sm:mx-0 sm:px-0 pb-1">
                         @php
                             $currentDev = request('device', 'all');
                             $devs = [
@@ -308,7 +313,7 @@
                         @endphp
                         @foreach($devs as $val => $label)
                             <a href="{{ route('admin.logs.index', array_merge(request()->query(), ['device' => $val, 'tab' => 'visitors'])) }}" 
-                               class="px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap {{ $currentDev === $val ? 'bg-loaction-500 text-white shadow-sm' : 'bg-slate-100 text-warm-gray hover:bg-slate-200 hover:text-ink' }}">
+                               class="px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap shrink-0 {{ $currentDev === $val ? 'bg-loaction-500 text-white shadow-sm' : 'bg-slate-100 text-warm-gray hover:bg-slate-200 hover:text-ink' }}">
                                 {{ $label }}
                             </a>
                         @endforeach
@@ -421,30 +426,30 @@
 </div>
 
 <!-- Modal Detail Log Properties -->
-<div id="detailModal" class="fixed inset-0 z-50 bg-ink/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl ring-1 ring-slate-200 transform transition-all">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+<div id="detailModal" class="fixed inset-0 z-50 bg-ink/60 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl ring-1 ring-slate-200 transform transition-all max-h-[90vh] flex flex-col">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 shrink-0">
             <h3 class="text-sm font-extrabold text-ink">Metadata & Payload Log</h3>
             <button type="button" onclick="document.getElementById('detailModal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
                 <svg class="size-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
-        <div class="mt-4 space-y-3">
+        <div class="mt-4 space-y-3 overflow-y-auto pr-1">
             <div>
                 <span class="text-[0.65rem] font-bold uppercase tracking-wider text-warm-gray block mb-1">Aktivitas</span>
                 <p id="modalDescription" class="text-xs font-semibold text-ink bg-slate-50 p-2.5 rounded-xl border border-slate-100"></p>
             </div>
             <div>
                 <span class="text-[0.65rem] font-bold uppercase tracking-wider text-warm-gray block mb-1">Properties (JSON Payload)</span>
-                <pre id="modalProperties" class="p-3 bg-slate-900 text-emerald-400 rounded-xl text-xs font-mono overflow-x-auto max-h-56 leading-relaxed"></pre>
+                <pre id="modalProperties" class="p-3 bg-slate-900 text-emerald-400 rounded-xl text-xs font-mono overflow-x-auto max-h-56 leading-relaxed break-all whitespace-pre-wrap"></pre>
             </div>
             <div>
                 <span class="text-[0.65rem] font-bold uppercase tracking-wider text-warm-gray block mb-1">User Agent (Browser / Perangkat)</span>
                 <p id="modalUserAgent" class="text-[0.7rem] text-slate-500 font-mono break-all"></p>
             </div>
         </div>
-        <div class="mt-5 text-right">
-            <button type="button" onclick="document.getElementById('detailModal').classList.add('hidden')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-ink font-bold text-xs transition">
+        <div class="mt-4 pt-3 border-t border-slate-100 text-right shrink-0">
+            <button type="button" onclick="document.getElementById('detailModal').classList.add('hidden')" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-ink font-bold text-xs transition">
                 Tutup
             </button>
         </div>
@@ -452,12 +457,12 @@
 </div>
 
 <!-- Modal Purge Logs -->
-<div id="purgeModal" class="fixed inset-0 z-50 bg-ink/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl ring-1 ring-slate-200">
+<div id="purgeModal" class="fixed inset-0 z-50 bg-ink/60 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-md w-full p-4 sm:p-6 shadow-2xl ring-1 ring-slate-200 max-h-[90vh] overflow-y-auto">
         <h3 class="text-base font-extrabold text-ink">Bersihkan Riwayat Log</h3>
         <p class="text-xs text-warm-gray mt-1">Pilih rentang waktu catatan aktivitas yang ingin dibersihkan dari database:</p>
 
-        <form method="POST" action="{{ route('admin.logs.purge') }}" class="mt-5 space-y-4">
+        <form method="POST" action="{{ route('admin.logs.purge') }}" class="mt-4 space-y-4">
             @csrf
             <div class="space-y-2">
                 <label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer">
