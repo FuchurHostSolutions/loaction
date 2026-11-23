@@ -66,16 +66,109 @@
                 <p class="text-xs text-slate-500 mt-1">Coba sesuaikan kata kunci pencarian atau filter status Anda.</p>
             </div>
         @else
-            {{-- Mobile swipe hint --}}
-            <div class="sm:hidden px-4 py-2 bg-slate-50 border-b border-slate-200/70 text-[0.68rem] text-slate-500 font-semibold flex items-center justify-between">
-                <span class="flex items-center gap-1.5">
-                    <svg class="size-3.5 text-loaction-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
-                    Geser tabel untuk melihat rincian & aksi
-                </span>
-                <span class="text-[0.65rem] text-slate-400 font-mono">swipe &rarr;</span>
+            {{-- Mobile Cards View (sm:hidden) --}}
+            <div class="sm:hidden divide-y divide-slate-100">
+                @foreach($consultations as $c)
+                    @php
+                        $cleanPhone = preg_replace('/[^0-9]/', '', $c->phone ?? '');
+                        if (str_starts_with($cleanPhone, '0')) {
+                            $cleanPhone = '62' . substr($cleanPhone, 1);
+                        }
+                        $waText = rawurlencode("Halo {$c->name}, kami dari Biro Psikologi LoAction mengonfirmasi permintaan konsultasi Anda mengenai layanan {$c->service?->title}.");
+                    @endphp
+                    <div class="p-4 transition {{ $c->status === 'pending' ? 'bg-amber-50/50' : 'bg-white' }}">
+                        {{-- Top Meta: ID, Date, and Status Badge --}}
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <span class="text-[0.68rem] font-mono text-slate-400 font-bold">
+                                #{{ $c->id }} &bull; {{ $c->created_at->format('d/m/Y H:i') }}
+                            </span>
+                            @if($c->status === 'processed')
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[0.65rem] font-bold bg-emerald-100 text-emerald-800 shrink-0">
+                                    <span class="size-1.5 rounded-full bg-emerald-500"></span> Selesai
+                                </span>
+                            @elseif($c->status === 'cancelled')
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[0.65rem] font-bold bg-rose-100 text-rose-800 shrink-0">
+                                    <span class="size-1.5 rounded-full bg-rose-500"></span> Dibatalkan
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[0.65rem] font-bold bg-amber-100 text-amber-800 shrink-0">
+                                    <span class="size-1.5 rounded-full bg-amber-500 animate-pulse"></span> Pending
+                                </span>
+                            @endif
+                        </div>
+
+                        {{-- Client Info --}}
+                        <div class="mb-3">
+                            <div class="flex items-center gap-2">
+                                @if($c->status === 'pending')
+                                    <span class="size-2 rounded-full bg-amber-500 animate-pulse shrink-0" title="Menunggu Ditangani"></span>
+                                @endif
+                                <a href="{{ route('admin.consultations.show', $c->id) }}" class="font-extrabold text-ink text-sm hover:text-loaction-600 transition">
+                                    {{ $c->name }}
+                                </a>
+                            </div>
+                            <div class="text-xs text-warm-gray font-semibold mt-0.5 flex flex-wrap items-center gap-2">
+                                <span class="text-loaction-600 font-bold">{{ $c->service?->title ?? 'Layanan Umum' }}</span>
+                                <span class="text-slate-300">&bull;</span>
+                                <span class="px-2 py-0.5 rounded text-[0.65rem] font-bold uppercase tracking-wider {{ $c->session_type === 'online' ? 'bg-sky-100 text-sky-700' : 'bg-emerald-100 text-emerald-700' }}">
+                                    {{ $c->session_type ?? 'TBA' }}
+                                </span>
+                                @if($c->preferred_time)
+                                    <span class="text-slate-400 text-[0.68rem]">({{ $c->preferred_time }})</span>
+                                @endif
+                            </div>
+                            <div class="flex items-center gap-2 text-[0.72rem] text-slate-500 mt-1 font-mono">
+                                <span>{{ $c->phone }}</span>
+                                @if($c->email)
+                                    <span class="text-slate-300 font-sans">&bull;</span>
+                                    <span class="truncate font-sans">{{ $c->email }}</span>
+                                @endif
+                            </div>
+                            @if($c->notes)
+                                <p class="text-[0.68rem] text-slate-500 mt-2 line-clamp-2 italic bg-slate-50 p-2 rounded-lg border border-slate-100">
+                                    "{{ $c->notes }}"
+                                </p>
+                            @endif
+                        </div>
+
+                        {{-- Actions Footer --}}
+                        <div class="flex items-center justify-between gap-2 pt-2.5 border-t border-slate-100">
+                            <div class="flex items-center gap-1.5">
+                                @if($cleanPhone)
+                                    <a href="https://wa.me/{{ $cleanPhone }}?text={{ $waText }}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs transition inline-flex items-center gap-1 shadow-sm">
+                                        <span>Chat WA</span>
+                                    </a>
+                                @endif
+                                @if($c->status !== 'processed')
+                                    <form method="POST" action="{{ route('admin.consultations.updateStatus', $c->id) }}" class="inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="processed">
+                                        <button type="submit" class="px-3 py-1.5 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 font-extrabold text-xs transition">
+                                            ✓ Selesai
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <a href="{{ route('admin.consultations.show', $c->id) }}" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-ink font-bold text-xs transition">
+                                    Detail
+                                </a>
+                                <form method="POST" action="{{ route('admin.consultations.destroy', $c->id) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data konsultasi ini?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition" title="Hapus">
+                                        <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
 
-            <div class="overflow-x-auto">
+            {{-- Desktop Table View (hidden sm:block) --}}
+            <div class="hidden sm:block overflow-x-auto">
                 <table class="w-full text-left text-xs min-w-[760px]">
                     <thead>
                         <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-extrabold text-[0.68rem] whitespace-nowrap">

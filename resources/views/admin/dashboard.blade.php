@@ -213,16 +213,72 @@
                 <p class="text-sm font-semibold">Belum ada formulir konsultasi yang masuk.</p>
             </div>
         @else
-            {{-- Mobile swipe hint --}}
-            <div class="sm:hidden px-4 py-2 bg-slate-50 border-b border-slate-200/70 text-[0.68rem] text-slate-500 font-semibold flex items-center justify-between">
-                <span class="flex items-center gap-1.5">
-                    <svg class="size-3.5 text-loaction-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
-                    Geser tabel untuk melihat status & aksi
-                </span>
-                <span class="text-[0.65rem] text-slate-400 font-mono">swipe &rarr;</span>
+            {{-- Mobile Card List (sm:hidden) --}}
+            <div class="sm:hidden divide-y divide-slate-100">
+                @foreach($recentConsultations as $c)
+                    <div class="p-4 space-y-3 {{ $c->status === 'pending' ? 'bg-amber-50/30' : '' }}">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2">
+                                    @if($c->status === 'pending')
+                                        <span class="size-2 rounded-full bg-amber-500 animate-pulse shrink-0" title="Menunggu Ditangani"></span>
+                                    @endif
+                                    <span class="font-bold text-ink text-sm truncate">{{ $c->name }}</span>
+                                </div>
+                                <span class="text-xs text-slate-500 font-mono block mt-0.5">{{ $c->phone }}</span>
+                            </div>
+                            @if($c->status === 'processed')
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[0.65rem] font-bold bg-emerald-100 text-emerald-800 shrink-0">
+                                    <span class="size-1.5 rounded-full bg-emerald-500"></span> Selesai
+                                </span>
+                            @elseif($c->status === 'cancelled')
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[0.65rem] font-bold bg-rose-100 text-rose-800 shrink-0">
+                                    <span class="size-1.5 rounded-full bg-rose-500"></span> Batal
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[0.65rem] font-bold bg-amber-100 text-amber-800 shrink-0">
+                                    <span class="size-1.5 rounded-full bg-amber-500 animate-pulse"></span> Pending
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                            <div>
+                                <span class="text-[0.65rem] text-slate-400 block font-semibold uppercase">Layanan</span>
+                                <span class="font-bold text-ink truncate block text-xs">{{ $c->service?->title ?? '-' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[0.65rem] text-slate-400 block font-semibold uppercase">Metode & Waktu</span>
+                                <span class="font-bold text-ink truncate block text-xs">
+                                    <span class="uppercase text-[0.65rem] {{ $c->session_type === 'online' ? 'text-sky-600' : 'text-emerald-600' }}">{{ $c->session_type ?? 'TBA' }}</span>
+                                    • {{ $c->preferred_time ?? '-' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-end gap-2 pt-1">
+                            @php
+                                $cleanPhone = preg_replace('/[^0-9]/', '', $c->phone ?? '');
+                                if (str_starts_with($cleanPhone, '0')) {
+                                    $cleanPhone = '62' . substr($cleanPhone, 1);
+                                }
+                                $waText = rawurlencode("Halo {$c->name}, kami dari Biro Psikologi LoAction mengonfirmasi permintaan konsultasi Anda.");
+                            @endphp
+                            @if($cleanPhone)
+                                <a href="https://wa.me/{{ $cleanPhone }}?text={{ $waText }}" target="_blank" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs transition shadow-sm">
+                                    WhatsApp
+                                </a>
+                            @endif
+                            <a href="{{ route('admin.consultations.show', $c->id) }}" class="inline-flex items-center px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-ink font-bold text-xs transition">
+                                Detail
+                            </a>
+                        </div>
+                    </div>
+                @endforeach
             </div>
 
-            <div class="overflow-x-auto">
+            {{-- Desktop Table View (hidden sm:block) --}}
+            <div class="hidden sm:block overflow-x-auto">
                 <table class="w-full text-left text-xs min-w-[680px]">
                     <thead>
                         <tr class="border-b border-slate-200 text-slate-400 uppercase tracking-wider font-bold whitespace-nowrap">

@@ -115,16 +115,54 @@
             </div>
 
             <!-- Table Logs -->
-            {{-- Mobile swipe hint --}}
-            <div class="sm:hidden px-4 py-2 bg-slate-50 border-b border-slate-200/70 text-[0.68rem] text-slate-500 font-semibold flex items-center justify-between">
-                <span class="flex items-center gap-1.5">
-                    <svg class="size-3.5 text-loaction-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
-                    Geser tabel untuk melihat rincian aktivitas
-                </span>
-                <span class="text-[0.65rem] text-slate-400 font-mono">swipe &rarr;</span>
+            {{-- Mobile Card List (sm:hidden) --}}
+            <div class="sm:hidden divide-y divide-slate-100">
+                @forelse($activityLogs as $log)
+                    <div class="p-4 space-y-2.5">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <div class="grid size-7 place-items-center rounded-lg bg-slate-100 text-[0.7rem] font-extrabold text-ink shrink-0">
+                                    {{ strtoupper(substr($log->user_name ?? 'S', 0, 1)) }}
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="block font-bold text-xs text-ink leading-tight truncate">{{ $log->user_name ?? 'Publik / Tamu' }}</span>
+                                    <span class="block text-[0.65rem] text-slate-400 font-mono">{{ $log->user ? $log->user->email : 'Non-login' }}</span>
+                                </div>
+                            </div>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[0.65rem] font-extrabold tracking-wider uppercase shrink-0 {{ $log->action_badge_class }}">
+                                {{ $log->action_type_label }}
+                            </span>
+                        </div>
+
+                        <p class="text-xs text-ink font-medium leading-relaxed">{{ $log->description }}</p>
+
+                        <div class="flex items-center justify-between pt-1 border-t border-slate-50 text-[0.68rem] text-slate-400 font-mono">
+                            <div class="flex items-center gap-2">
+                                <span>{{ $log->created_at->format('d/m/Y H:i') }}</span>
+                                <span>&bull;</span>
+                                <span>{{ $log->ip_address ?? '-' }}</span>
+                            </div>
+                            @if(!empty($log->properties))
+                                <button 
+                                    type="button" 
+                                    onclick="showLogDetail({{ json_encode($log->properties) }}, '{{ addslashes($log->description) }}', '{{ $log->user_agent }}')" 
+                                    class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-ink font-bold font-sans text-xs transition inline-flex items-center gap-1"
+                                >
+                                    <svg class="size-3 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+                                    <span>Detail</span>
+                                </button>
+                            @endif
+                        </div>
+                    </div>
+                @empty
+                    <div class="py-12 text-center text-warm-gray text-xs">
+                        Belum ada catatan log aktivitas yang cocok dengan kriteria.
+                    </div>
+                @endforelse
             </div>
 
-            <div class="overflow-x-auto">
+            {{-- Desktop Table View (hidden sm:block) --}}
+            <div class="hidden sm:block overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[860px]">
                     <thead>
                         <tr class="border-b border-slate-100 bg-slate-50/70 text-[0.7rem] font-extrabold uppercase tracking-wider text-warm-gray">
@@ -279,16 +317,47 @@
             </div>
 
             <!-- Table Visitor Logs -->
-            {{-- Mobile swipe hint --}}
-            <div class="sm:hidden px-4 py-2 bg-slate-50 border-b border-slate-200/70 text-[0.68rem] text-slate-500 font-semibold flex items-center justify-between">
-                <span class="flex items-center gap-1.5">
-                    <svg class="size-3.5 text-loaction-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
-                    Geser tabel untuk melihat rincian kunjungan
-                </span>
-                <span class="text-[0.65rem] text-slate-400 font-mono">swipe &rarr;</span>
+            {{-- Mobile Card List (sm:hidden) --}}
+            <div class="sm:hidden divide-y divide-slate-100">
+                @forelse($visitorLogs as $visit)
+                    @php
+                        $devBadge = match($visit->device) {
+                            'desktop' => 'bg-slate-100 text-slate-700 ring-slate-200',
+                            'mobile'  => 'bg-indigo-50 text-indigo-700 ring-indigo-200',
+                            'tablet'  => 'bg-purple-50 text-purple-700 ring-purple-200',
+                            default   => 'bg-amber-50 text-amber-700 ring-amber-200',
+                        };
+                    @endphp
+                    <div class="p-4 space-y-2">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="min-w-0">
+                                <span class="font-bold text-xs text-ink block truncate">{{ $visit->page_title }}</span>
+                                <span class="font-mono text-[0.68rem] text-slate-400 block truncate">{{ $visit->url }}</span>
+                            </div>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[0.65rem] font-extrabold uppercase tracking-wider ring-1 shrink-0 {{ $devBadge }}">
+                                {{ ucfirst($visit->device) }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-1 border-t border-slate-50 text-[0.68rem] text-slate-400 font-mono">
+                            <span>{{ $visit->created_at->format('d/m/Y H:i') }}</span>
+                            <span class="text-ink font-semibold">{{ $visit->ip_address }}</span>
+                        </div>
+                        @if($visit->referer)
+                            <div class="text-[0.65rem] text-slate-400 font-mono truncate" title="{{ $visit->referer }}">
+                                Ref: {{ parse_url($visit->referer, PHP_URL_HOST) ?? $visit->referer }}
+                            </div>
+                        @endif
+                    </div>
+                @empty
+                    <div class="py-12 text-center text-warm-gray text-xs">
+                        Belum ada catatan pengunjung yang cocok dengan filter.
+                    </div>
+                @endforelse
             </div>
 
-            <div class="overflow-x-auto">
+            {{-- Desktop Table View (hidden sm:block) --}}
+            <div class="hidden sm:block overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[780px]">
                     <thead>
                         <tr class="border-b border-slate-100 bg-slate-50/70 text-[0.7rem] font-extrabold uppercase tracking-wider text-warm-gray">
