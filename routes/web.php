@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KontakController;
@@ -70,5 +71,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
         Route::post('/logs/purge', [LogController::class, 'purgeActivity'])->name('logs.purge');
         Route::post('/logs/clear-system', [LogController::class, 'clearSystemLog'])->name('logs.clearSystem');
+
+        // Website Settings (CMS)
+        Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
+        Route::put('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
     });
 });

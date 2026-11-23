@@ -36,7 +36,7 @@
                         </div>
                         <div>
                             <strong class="block text-sm font-extrabold text-ink">Instagram</strong>
-                            <span class="text-sm text-warm-gray transition group-hover:text-loaction-600">@loaction.id</span>
+                            <span class="text-sm text-warm-gray transition group-hover:text-loaction-600">{{ setting('instagram_handle', '@loaction.id') }}</span>
                         </div>
                     </a>
 
@@ -46,19 +46,32 @@
                         </div>
                         <div>
                             <strong class="block text-sm font-extrabold text-ink">WhatsApp</strong>
-                            <span class="text-sm text-warm-gray transition group-hover:text-loaction-600">Chat langsung dengan LoAction</span>
+                            <span class="text-sm text-warm-gray transition group-hover:text-loaction-600">{{ setting('whatsapp_display', '+62 812-3456-7890') }}</span>
                         </div>
                     </a>
 
-                    <a href="mailto:hello@loaction.id" class="group flex items-center gap-4 rounded-2xl bg-soft-bg p-5 shadow-sm ring-1 ring-loaction-100/60 transition hover:shadow-card">
+                    <a href="mailto:{{ setting('email', 'hello@loaction.id') }}" class="group flex items-center gap-4 rounded-2xl bg-soft-bg p-5 shadow-sm ring-1 ring-loaction-100/60 transition hover:shadow-card">
                         <div class="grid size-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-loaction-500 to-loaction-700 text-white">
                             <svg class="size-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
                         </div>
                         <div>
                             <strong class="block text-sm font-extrabold text-ink">Email</strong>
-                            <span class="text-sm text-warm-gray transition group-hover:text-loaction-600">hello@loaction.id</span>
+                            <span class="text-sm text-warm-gray transition group-hover:text-loaction-600">{{ setting('email', 'hello@loaction.id') }}</span>
                         </div>
                     </a>
+
+                    @if($address = setting('address'))
+                    <div class="flex items-center gap-4 rounded-2xl bg-soft-bg p-5 shadow-sm ring-1 ring-loaction-100/60">
+                        <div class="grid size-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-amber-500 to-loaction-600 text-white">
+                            <svg class="size-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                        </div>
+                        <div>
+                            <strong class="block text-sm font-extrabold text-ink">Lokasi & Jam Operasional</strong>
+                            <span class="text-xs text-warm-gray block leading-relaxed">{{ $address }}</span>
+                            <span class="text-[0.7rem] font-bold text-loaction-600 block mt-1">{{ setting('operating_hours', 'Senin – Sabtu: 08.30 – 17.00 WIB') }}</span>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
 

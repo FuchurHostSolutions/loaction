@@ -17,10 +17,10 @@
                     Biro Psikologi Terapan Sejak 2017
                 </div>
                 <h1 class="mt-4 sm:mt-5 text-3xl font-extrabold leading-[1.15] tracking-[-0.03em] text-ink sm:text-4xl md:text-5xl lg:text-[3.4rem]">
-                    <span class="gradient-text">Handle with Care</span> untuk Pengembangan Potensi Manusia
+                    <span class="gradient-text">{{ setting('tagline', 'Handle with Care') }}</span> untuk Pengembangan Potensi Manusia
                 </h1>
                 <p class="mt-4 sm:mt-5 max-w-xl text-sm sm:text-base leading-relaxed sm:leading-7 text-warm-gray lg:text-lg lg:leading-8">
-                    LoAction menyediakan layanan psikologis yang cepat, tepat, dan disesuaikan dengan kebutuhan individu, keluarga, institusi pendidikan, organisasi, serta pengembangan SDM.
+                    {{ setting('hero_subtitle', 'LoAction menyediakan layanan psikologis yang cepat, tepat, dan disesuaikan dengan kebutuhan individu, keluarga, institusi pendidikan, organisasi, serta pengembangan SDM.') }}
                 </p>
                 <div class="mt-6 sm:mt-8 flex flex-col gap-3 sm:flex-row">
                     <a href="{{ route('kontak') }}" class="btn-primary w-full sm:w-auto text-center justify-center">

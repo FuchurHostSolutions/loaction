@@ -10,7 +10,17 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        //
+        if (!function_exists('setting')) {
+            function setting(string $key, mixed $default = null): mixed {
+                return \App\Models\Setting::get($key, $default);
+            }
+        }
+
+        if (!function_exists('whatsapp_url')) {
+            function whatsapp_url(?string $customText = null): string {
+                return \App\Models\Setting::whatsappUrl($customText);
+            }
+        }
     }
 
     public function boot(): void
@@ -19,10 +29,13 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        // Share social URLs with all views globally
-        View::share([
-            'instagramUrl' => 'https://www.instagram.com/p/DSl2deij9Ig/?igsh=ajM1b3B5eXFwaWtp',
-            'whatsappUrl'  => 'https://wa.me/6281234567890?text=Halo%20LoAction,%20saya%20ingin%20konsultasi%20layanan%20psikologi.',
-        ]);
+        // Share dynamic settings & social URLs with all views globally
+        View::composer('*', function ($view) {
+            $view->with([
+                'siteSettings' => \App\Models\Setting::getAllSettings(),
+                'whatsappUrl'  => \App\Models\Setting::whatsappUrl(),
+                'instagramUrl' => \App\Models\Setting::instagramUrl(),
+            ]);
+        });
     }
 }

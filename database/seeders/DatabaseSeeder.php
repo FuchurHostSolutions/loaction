@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             TestimonialSeeder::class,
             ConsultationSeeder::class,
             PostSeeder::class,
+            SettingSeeder::class,
         ]);
     }
 }

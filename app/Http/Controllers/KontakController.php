@@ -92,8 +92,8 @@ class KontakController extends Controller
             . (!empty($consultation->message) ? "• Pesan: {$consultation->message}\n\n" : "\n")
             . "Mohon info ketersediaan jadwal terdekat. Terima kasih.";
 
-        // WhatsApp admin number
-        $waUrl = "https://wa.me/6281234567890?text=" . rawurlencode($waText);
+        // Dynamic WhatsApp admin redirect URL from CMS settings
+        $waUrl = \App\Models\Setting::whatsappUrl($waText);
 
         return back()->with([
             'status'       => 'Terima kasih, ' . $validated['name'] . '. Permintaan konsultasi Anda untuk "' . $validated['service'] . '" telah tercatat di sistem kami.',
