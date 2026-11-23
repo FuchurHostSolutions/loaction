@@ -10,17 +10,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        if (!function_exists('setting')) {
-            function setting(string $key, mixed $default = null): mixed {
-                return \App\Models\Setting::get($key, $default);
-            }
-        }
-
-        if (!function_exists('whatsapp_url')) {
-            function whatsapp_url(?string $customText = null): string {
-                return \App\Models\Setting::whatsappUrl($customText);
-            }
-        }
+        //
     }
 
     public function boot(): void
