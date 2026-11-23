@@ -93,6 +93,15 @@ class SettingController extends Controller
             actionType: 'master_data'
         );
 
-        return redirect()->route('admin.settings.index')->with('success', 'Pengaturan website berhasil diperbarui dan telah aktif.');
+        $activeTab = $request->input('active_tab', 'contact');
+        $tabAnchor = match ($activeTab) {
+            'tab-location', 'location' => 'location',
+            'tab-identity', 'identity' => 'identity',
+            'tab-seo', 'seo'           => 'seo',
+            default                    => 'contact',
+        };
+
+        return redirect()->to(route('admin.settings.index') . '#' . $tabAnchor)
+            ->with('success', 'Pengaturan website berhasil diperbarui dan telah aktif.');
     }
 }
